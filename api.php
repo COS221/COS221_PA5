@@ -202,41 +202,44 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                 } else{
                   failure("Error: Unable to fetch wines from server at the moment");
                 }  
-            } else  if (isset($GLOBALS['data']->action) && $GLOBALS['data']->action == "rateWinery"){  //filling homepage
-                  if (isset($GLOBALS['data']->limit)){
-                    $stmt = $conn->prepare("SELECT * FROM wines LIMIT ".$GLOBALS['data']->limit);
-                    $stmt->execute();
-                    $count = $stmt->rowCount();
-                    if($count > 0) {
-                      $post_arr = array();
-                        while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                          extract($row);
-                          //var_dump($row);
-                            # code...
-                            $post_item = array(
-                              'Business_ID' => $row['Business_ID'],
-                              'BName' => $row['BName'],
-                              'Website_URL' => $row['Website_URL'],
-                              'Weekday_open_time' => $row['Weekday_open_time'],
-                              'Weekend_open_time' => $row['Weekend_open_time'],
-                              'Weekend_close_time' => $row['Weekend_close_time'],
-                              'Instagram' => $row['Instagram'],
-                              'Twitter' => $row['Twitter'],
-                              'Facebook' => $row['Facebook'],
-                              'Description' => $row['Description'],
-                              'User_ID' => $row['User_ID'],
-                              'Region_ID' => $row['Region_ID']
-                            );
-                        array_push($post_arr, $post_item);
-                }
-                  success($post_arr);
-                } else{
-                  failure("Error: Unable to fetch wines from server at the moment");
-                }  
-                  }
+            }
+          } 
+  else  if (isset($GLOBALS['data']->action) && $GLOBALS['data']->action == "getAllWineries"){  //filling homepage
+            if (isset($GLOBALS['data']->limit)){
+              $stmt = $conn->prepare("SELECT * FROM wines LIMIT ".$GLOBALS['data']->limit);
+              $stmt->execute();
+              $count = $stmt->rowCount();
+              if($count > 0) {
+                $post_arr = array();
+                  while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    //var_dump($row);
+                      # code...
+                      $post_item = array(
+                        'Business_ID' => $row['Business_ID'],
+                        'BName' => $row['BName'],
+                        'Website_URL' => $row['Website_URL'],
+                        'Weekday_open_time' => $row['Weekday_open_time'],
+                        'Weekend_open_time' => $row['Weekend_open_time'],
+                        'Weekend_close_time' => $row['Weekend_close_time'],
+                        'Instagram' => $row['Instagram'],
+                        'Twitter' => $row['Twitter'],
+                        'Facebook' => $row['Facebook'],
+                        'Description' => $row['Description'],
+                        'User_ID' => $row['User_ID'],
+                        'Region_ID' => $row['Region_ID'],
 
-              }
+                      );
+                  array_push($post_arr, $post_item);
+          }
+            success($post_arr);
+          } else{
+            failure("Error: Unable to fetch wines from server at the moment");
+          }  
+            }
+
         }
-} 
+  }
+
 
 ?>
