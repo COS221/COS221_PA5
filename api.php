@@ -136,7 +136,7 @@ function search($possible){
           # code...
           $select[] = $column . ' = "' . $GLOBALS['data']->search->$column.'"' ;
           // echo "Added to where statement";
-           var_dump($select);
+           //var_dump($select);
       }
   }
   return implode(' AND ', $select);
@@ -282,35 +282,38 @@ function limit(){
   
 }
 
-function rateWine(){ //userID must be specified
+//Creating and update functions may be added here
 
-    $sql = "Select * from wine_reviews WHERE UserID= '".$GLOBALS['data']->userID."' AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
-    $stmt = $GLOBALS['conn']->prepare($sql); 
-    $stmt->execute();
 
-    $count = $stmt->rowCount();
+// function rateWine(){ //userID must be specified
 
-      if ($count == 0) {
-          # code...
-          $sql = "INSERT INTO wine_reviews VALUES ('".$GLOBALS['data']->rate->Wine_ID."', ".$GLOBALS['data']->userID.", ".$GLOBALS['data']->rate->rating.", ".$GLOBALS['data']->rate->comment.")";
-        // var_dump($sql);
+//     $sql = "Select * from wine_reviews WHERE UserID= '".$GLOBALS['data']->userID."' AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
+//     $stmt = $GLOBALS['conn']->prepare($sql); 
+//     $stmt->execute();
 
-          $stmt = $GLOBALS['conn']->prepare($sql);
-          $stmt->execute();
-      } 
-      else {
-          $sql = "UPDATE wine_reviews SET Rating= ".$GLOBALS['data']->rate->rating.", SET Comment= ".$GLOBALS['data']->rate->comment." WHERE userID='".$GLOBALS['data']->userID."' AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
+//     $count = $stmt->rowCount();
 
-          $stmt = $GLOBALS['conn']->prepare($sql);
-          $stmt->execute();
-      }
-}
+//       if ($count == 0) {
+//           # code...
+//           $sql = "INSERT INTO wine_reviews VALUES ('".$GLOBALS['data']->rate->Wine_ID."', ".$GLOBALS['data']->userID.", ".$GLOBALS['data']->rate->rating.", ".$GLOBALS['data']->rate->comment.")";
+//         // var_dump($sql);
+
+//           $stmt = $GLOBALS['conn']->prepare($sql);
+//           $stmt->execute();
+//       } 
+//       else {
+//           $sql = "UPDATE wine_reviews SET Rating= ".$GLOBALS['data']->rate->rating.", SET Comment= ".$GLOBALS['data']->rate->comment." WHERE userID='".$GLOBALS['data']->userID."' AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
+
+//           $stmt = $GLOBALS['conn']->prepare($sql);
+//           $stmt->execute();
+//       }
+// }
 
 
 //A default user who isnt logged in will use the apikey 123456
 if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key == $apikey ) {   //validate APIkey
     # code...
-    echo("Test");
+   // echo("Test");
     if (!isset($GLOBALS['data']->return)){
         failure("Specify return please.");
     }
@@ -323,7 +326,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
         if ($GLOBALS['data']->type == "GetAllWines"){
           if (isset($GLOBALS['data']->page)){
             //var_dump("Bruh");
-            $sql = "SELECT ";  //SQL
+            $sql = "SELECT * from wine";  //SQL
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $count = $stmt->rowCount();
@@ -335,24 +338,23 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                     # code...
                     $post_item = array(
                         'WineID' => $row['WineID'],
-                        'Bname' => $row['Bname'],
+                        'Name' => $row['Name'],
                         'Body' => $row['Body'],
                         'Alcohol' => $row['Alcohol'],
                         'Tannin' => $row['Tannin'],
                         'Acidity' => $row['Acidity'],
                         'Sweetness' => $row['Sweetness'],
-                        'Brand_name' => $row['Brand_name'],
+                        'Producer' => $row['Producer'],
                         'Vintage' => $row['Vintage'],
-                        'Origin' => $row['Origin'],
+                        'Wine_URL' => $row['Wine_URL'],
                         'Volume' => $row['Volume'],
-                        'Code_Num' => $row['Code_Num'],
                         'Cultivars' => $row['Cultivars'],
                         'Category' => $row['Category'],
                         'Description' => $row['Description'],
                         'Cost_per_bottle' => $row['Cost_per_bottle'],
                         'Cost_per_glass' => $row['Cost_per_glass'],
-                        'Price_category' => $row['Price_category'],
-                        'Lot_ID' => $row['Lot_ID']
+                        'Price_Category' => $row['Price_Category'],
+                        'Business_ID' => $row['Business_ID']
                     );
 
                     array_push($post_arr, $post_item);
@@ -367,9 +369,9 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
           else{
              $table = "wine";
 
-            $possibleSelect = array('Body','Alcohol','Tannin','Acidity','Sweetness','Brand_name','Vintage','engine_type','Origin' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category' );
+            $possibleSelect = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Name');
 
-            $valid  = array('Body','Alcohol','Tannin','Acidity','Sweetness','Brand_name','Vintage','engine_type','Origin' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Lot_ID' );
+            $valid  = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Business_ID','Name');
             // $where = whereClause($valid);
             // if (isset($GLOBALS['data']->fuzzy) && $GLOBALS['data']->fuzzy==true){
             //     $where = whereClauseFuzzy($valid);
@@ -394,7 +396,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
       
               }
             // $sql = "SELECT ".select($possibleSelect)." FROM ".$table." ";    //Get relevant wine data
-            $possibleSort = array('Body','Alcohol','Tannin','Acidity','Sweetness','Brand_name','Vintage','engine_type','Origin' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category' );
+            $possibleSort = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category' );
 
             if (sortBy($possibleSort)) {
               $sql= $sql. " ORDER BY ".$GLOBALS['data']->sort;
@@ -423,24 +425,23 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                     # code...
                     $post_item = array(
                         'WineID' => $row['WineID'],
-                        'Bname' => $row['Bname'],
+                        'Name' => $row['Name'],
                         'Body' => $row['Body'],
                         'Alcohol' => $row['Alcohol'],
                         'Tannin' => $row['Tannin'],
                         'Acidity' => $row['Acidity'],
                         'Sweetness' => $row['Sweetness'],
-                        'Brand_name' => $row['Brand_name'],
+                        'Producer' => $row['Producer'],
                         'Vintage' => $row['Vintage'],
-                        'Origin' => $row['Origin'],
+                        'Wine_URL' => $row['Wine_URL'],
                         'Volume' => $row['Volume'],
-                        'Code_Num' => $row['Code_Num'],
                         'Cultivars' => $row['Cultivars'],
                         'Category' => $row['Category'],
                         'Description' => $row['Description'],
                         'Cost_per_bottle' => $row['Cost_per_bottle'],
                         'Cost_per_glass' => $row['Cost_per_glass'],
-                        'Price_category' => $row['Price_category'],
-                        'Lot_ID' => $row['Lot_ID']
+                        'Price_Category' => $row['Price_Category'],
+                        'Business_ID' => $row['Business_ID']
                     );
 
                     array_push($post_arr, $post_item);
@@ -456,10 +457,10 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
 
         else 
         
-        if ($GLOBALS['data']->type == "getAllWineries"){
+        if ($GLOBALS['data']->type == "GetAllWineries"){
           if (isset($GLOBALS['data']->page)){
             //var_dump("Bruh");
-            $sql = "SELECT ";  //SQL
+            $sql = "SELECT * from business";  //SQL
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $count = $stmt->rowCount();
@@ -470,8 +471,8 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                   //var_dump($row);  //to use later for testing queries
                     # code...
                     $post_item = array(
-                        'BusinessID' => $row['BusinessID'],
-                        'Bname' => $row['Bname'],
+                        'Business_ID' => $row['Business_ID'],
+                        'BName' => $row['BName'],
                         'Business_URL' => $row['Business_URL'],
                         'Website_URL' => $row['Website_URL'],
                         'Weekday_open_time' => $row['Weekday_open_time'],
@@ -496,11 +497,11 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
 
           } 
           else{
-             $table = "business";
+              $table = "business";
 
-            $possibleSelect = array('BusinessID','Bname','Business_URL','Website_URL','Weekday_open_time','Weekday_close_time','Weekend_open_time','Instagram','Twitter' ,'Facebook','Description','User_ID','Region_ID');
+            $possibleSelect = array('Business_ID','BName','Business_URL','Website_URL','Weekday_open_time','Weekday_close_time','Weekend_open_time','Instagram','Twitter' ,'Facebook','Description','User_ID','Region_ID');
 
-            $valid  = array('BusinessID','Bname','Business_URL','Website_URL','Weekday_open_time','Weekday_close_time','Weekend_open_time','Instagram','Twitter' ,'Facebook','Description','User_ID','Region_ID');
+            $valid  = array('Business_ID','BName','Business_URL','Website_URL','Weekday_open_time','Weekday_close_time','Weekend_open_time','Instagram','Twitter' ,'Facebook','Description','User_ID','Region_ID');
             // $where = whereClause($valid);
             // if (isset($GLOBALS['data']->fuzzy) && $GLOBALS['data']->fuzzy==true){
             //     $where = whereClauseFuzzy($valid);
@@ -525,7 +526,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
       
               }
             // $sql = "SELECT ".select($possibleSelect)." FROM ".$table." ";    //Get relevant wine data
-            $possibleSort =array('BusinessID','Bname','Business_URL','Website_URL','Weekday_open_time','Weekday_close_time','Weekend_open_time','Instagram','Twitter' ,'Facebook','Description','User_ID','Region_ID');
+            $possibleSort =array('Business_ID','BName','Business_URL','Website_URL','Weekday_open_time','Weekday_close_time','Weekend_open_time','Instagram','Twitter' ,'Facebook','Description','User_ID','Region_ID');
 
             if (sortBy($possibleSort)) {
               $sql= $sql. " ORDER BY ".$GLOBALS['data']->sort;
@@ -541,7 +542,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
               $sql= $sql." LIMIT ".$GLOBALS['data']->limit;
             }
 
-            var_dump($sql);
+            //var_dump($sql);
 
             $stmt = $conn->prepare($sql);
             $stmt->execute();
@@ -553,8 +554,8 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                   //var_dump($row);  //to use later for testing queries
                     # code...
                     $post_item = array(
-                        'BusinessID' => $row['BusinessID'],
-                        'Bname' => $row['Bname'],
+                        'Business_ID' => $row['Business_ID'],
+                        'BName' => $row['BName'],
                         'Business_URL' => $row['Business_URL'],
                         'Website_URL' => $row['Website_URL'],
                         'Weekday_open_time' => $row['Weekday_open_time'],
@@ -581,13 +582,13 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
         
         else 
         
-        if ($GLOBALS['data']->type == "createWinery"){
+        // if ($GLOBALS['data']->type == "CreateWinery"){  //I think we can just submit a form and do it in JS on the frontend-API, thoughts?
 
-        }
+        // }
 
-        else 
+        // else 
         
-        if ($GLOBALS['data']->type == "rateWine"){
+        if ($GLOBALS['data']->type == "RateWine"){
 
           $sql = "Select * from wine_reviews WHERE UserID= '".$GLOBALS['data']->userID."' AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
           $stmt = $GLOBALS['conn']->prepare($sql); 
@@ -613,7 +614,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
         
         else 
         
-        if ($GLOBALS['data']->type == "rateWinery"){
+        if ($GLOBALS['data']->type == "RateWinery"){
           $sql = "Select * from business_reviews WHERE UserID= '".$GLOBALS['data']->userID."' AND Business_ID = ".$GLOBALS['data']->rate->Business_ID;
           $stmt = $GLOBALS['conn']->prepare($sql); 
           $stmt->execute();
@@ -637,15 +638,102 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             
         }
         //Later endpoints to be added here
-        else if ($GLOBALS['data']->type == ""){
-       
+        else if ($GLOBALS['data']->type == "FavouriteWine"){
+          if (isset($GLOBALS['data']->userID)){
+            //var_dump("Bruh");
+            $sql = "SELECT fav.WineID, fav.UserID, w.Name, w.Vintage, w.Producer, w.Category, w.Cultivars, w.Description, w.Cost_per_bottle FROM favourite_wine as fav INNER JOIN wine as w ON w.WineID=fav.WineID WHERE fav.UserID=".$GLOBALS['data']->userID;
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            
+            $count = $stmt->rowCount();
+            if($count > 0) {
+                $post_arr = array();
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                  //var_dump($row);  //to use later for testing queries
+                    # code...
+                    $post_item = array(
+                        'WineID' => $row['WineID'],
+                        'UserID' => $row['UserID'],
+                        'Name' => $row['Name'],
+                        'Vintage' => $row['Vintage'],
+                        'Producer' => $row['Producer'],
+                        'Category' => $row['Category'],
+                        'Cultivars' => $row['Cultivars'],
+                        'Description' => $row['Description'],
+                        'Cost_per_bottle' => $row['Cost_per_bottle'],
+                    );
+
+                    array_push($post_arr, $post_item);
+                }
+                  success($post_arr);
+            } 
+              else{ 
+                failure("No wines with this name found"); 
+              }
+
+          } else{
+            failure("Please specify a userID.");
+          }
             
         }
 
+        else if ($GLOBALS['data']->type == "GetWineReviews"){  //returns nothing for now
+          if (isset($GLOBALS['data']->return)){
+            //var_dump("Bruh");
+            $sql = "SELECT wr.Wine_ID, wr.UserID, wr.Rating, wr.Comment ,w.Name, w.Vintage, w.Producer, w.Category, w.Cultivars, w.Description, w.Cost_per_bottle FROM wine_reviews as wr INNER JOIN wine as w ON w.WineID=wr.Wine_ID" ;
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            
+            $count = $stmt->rowCount();
+            if($count > 0) {
+                $post_arr = array();
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                  //var_dump($row);  //to use later for testing queries
+                    # code...
+                    $post_item = array(
+                        'WineID' => $row['WineID'],
+                        'UserID' => $row['UserID'],
+                        'Rating' => $row['Rating'],
+                        'Comment' => $row['Comment'],
+                        'Name' => $row['Name'],
+                        'Vintage' => $row['Vintage'],
+                        'Producer' => $row['Producer'],
+                        'Category' => $row['Category'],
+                        'Cultivars' => $row['Cultivars'],
+                        'Description' => $row['Description'],
+                        'Cost_per_bottle' => $row['Cost_per_bottle'],
+                    );
 
-    } else{
-        failure("Type not specified.");
-    }
+                    array_push($post_arr, $post_item);
+                }
+                  success($post_arr);
+            } 
+              else{ 
+                failure("No wines with this name found"); 
+              }
+
+          }
+          else{ 
+            failure("Error: please specify a return value (*_*)"); 
+          }
+            
+        } 
+
+        // else if ($GLOBALS['data']->type == ""){  //template for adding more endpoints later
+       
+            
+        // }        
+        
+        
+        else{
+          failure("Error: Invalid Type parameter, please check spelling or ask the API team for assistance");
+        }
+
+  } else{
+      failure("Type not specified.");
+  }
 
   }
 
