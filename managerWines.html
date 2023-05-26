@@ -10,9 +10,11 @@
             justify-content: center;
         }
     </style>
-    <title>Manager View</title>
+    <title>Manager Wines View</title>
 </head>
 <body>
+
+    <!--The NavBar-->
     <ul class="nav nav-tabs d-flex">
         <li class="nav-item">
             <a class="nav-link" href="managerOverview.html">Overview</a>
@@ -24,5 +26,83 @@
             <a class="nav-link active" aria-current="page" href="managerWines.html">Wines</a>
         </li>
     </ul>
+
+
+
+ <!--The table-->
+    <div class="container mt-5 vh-100">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="text-center">My Wines</h1>
+            <div>
+                <button class="btn btn-success me-2">
+                    <i class="bi bi-plus-circle-fill"></i> Add
+                </button>
+                <button class="btn btn-warning me-2">
+                    <i class="bi bi-pencil-fill"></i> Update
+                </button>
+                <button class="btn btn-danger">
+                    <i class="bi bi-trash-fill"></i> Remove
+                </button>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>WineId</th>
+                    <th>Body</th>
+                    <th>Alcohol</th>
+                    <th>Tannin</th>
+                    <th>Acidity</th>
+                    <th>Sweetness</th>
+                    <th>Vintage</th>
+                    <th>Origin</th>
+                    <th>Volume</th>
+                    <th>Code_name</th>
+                    <th>Cultivars</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Cost_per_bottle</th>
+                
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Full-bodied</td>
+                    <td>14%</td>
+                    <td>Medium</td>
+                    <td>Moderate</td>
+                    <td>Dry</td>
+                    <td>2018</td>
+                    <td>France</td>
+                    <td>750ml</td>
+                    <td>ABC123</td>
+                    <td>Chardonnay</td>
+                    <td>White</td>
+                    <td>A crisp and refreshing white wine with citrus notes.</td>
+                    <td>$30</td>
+                   
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Medium-bodied</td>
+                    <td>12%</td>
+                    <td>Low</td>
+                    <td>High</td>
+                    <td>Sweet</td>
+                    <td>2019</td>
+                    <td>Italy</td>
+                    <td>750ml</td>
+                    <td>XYZ456</td>
+                    <td>Merlot</td>
+                    <td>Red</td>
+                    <td>A smooth and velvety red wine with hints of cherry.</td>
+                    <td>$35</td>
+                </tr>
+                <!-- Add more rows for additional wines -->
+            </tbody>
+        </table>
+    </div>
+    
 </body>
 </html>
