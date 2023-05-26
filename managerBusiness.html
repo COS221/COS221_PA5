@@ -9,6 +9,10 @@
         .d-flex {
             justify-content: center;
         }
+
+        .heading {
+            text-align: center;
+        }
     </style>
     <title>Manager View</title>
 </head>
@@ -24,5 +28,83 @@
             <a class="nav-link" href="managerWines.html">Wines</a>
         </li>
     </ul>
+    <div class="container mt-4">
+        <h3 class="heading">Business Information</h3>
+        <form>
+            <div class="mb-3">
+                <label for="businessName" class="form-label">Business Name</label>
+                <input type="text" class="form-control" id="businessName">
+            </div>
+            <div class="mb-3">
+                <label for="businessDescription" class="form-label">Description about business</label>
+                <textarea class="form-control" id="businessDescription" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="websiteURL" class="form-label">URL for website</label>
+                <input type="text" class="form-control" id="websiteURL">
+            </div>
+            <div class="mb-3">
+                <label for="contactPhone" class="form-label">Contact Phone</label>
+                <input type="text" class="form-control" id="contactPhone">
+            </div>
+            <div class="mb-3">
+                <label for="contactEmail" class="form-label">Contact Email</label>
+                <input type="email" class="form-control" id="contactEmail">
+            </div>
+            <div class="mb-3">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" class="form-control" id="country">
+            </div>
+            <div class="mb-3">
+                <label for="region" class="form-label">Region Name</label>
+                <input type="text" class="form-control" id="region">
+            </div>
+            <div class="mb-3">
+                <label for="longitude" class="form-label">Longitude</label>
+                <input type="text" class="form-control" id="longitude">
+            </div>
+            <div class="mb-3">
+                <label for="latitude" class="form-label">Latitude</label>
+                <input type="text" class="form-control" id="latitude">
+            </div>
+            <div class="mb-3">
+                <h4 class="heading">Times</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="weekendOpenTime" class="form-label">Weekend Opening Time</label>
+                            <input type="text" class="form-control" id="weekendOpenTime">
+                        </div>
+                        <div class="mb-3">
+                            <label for="weekendCloseTime" class="form-label">Weekend Closing Time</label>
+                            <input type="text" class="form-control" id="weekendCloseTime">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="weekdayOpenTime" class="form-label">Weekday Opening Time</label>
+                            <input type="text" class="form-control" id="weekdayOpenTime">
+                        </div>
+                        <div class="mb-3">
+                            <label for="weekdayCloseTime" class="form-label">Weekday Closing Time</label>
+                            <input type="text" class="form-control" id="weekdayCloseTime">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <h4 class="heading">Events</h4>
+                <div class="form-group">
+                    <label for="eventName">Event Name</label>
+                    <input type="text" class="form-control" id="eventName">
+                </div>
+                <div class="form-group">
+                    <label for="eventsDescription">Events Description</label>
+                    <textarea class="form-control" id="eventsDescription" rows="3"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg d-block mx-auto">Update Information</button>
+        </form>
+    </div>
 </body>
 </html>
