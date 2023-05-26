@@ -7,6 +7,7 @@ xhr.onload=function(){
         let objectData = JSON.parse(this.responseText); 
 
         let row = document.querySelector('row');
+        row.innerHTML = '';
         data= ``;
         
         for (value in objectData){
