@@ -12,3 +12,23 @@ body::before {
 .nav-link {
   color: #00192B;
 }
+
+@keyframes goldborder {
+  0% {
+    border-color: gold;
+    box-shadow: inset 3px 0 3px gold, inset -3px 0 3px gold, inset 0 3px 3px gold, inset 0 -3px 3px gold;
+  }
+  30% {
+    border-color: white;
+    box-shadow: inset 3px 0 3px white, inset -3px 0 3px white, inset 0 3px 3px white, inset 0 -3px 3px white;
+  }
+  100% {
+    border-color: gold;
+    box-shadow: inset 3px 0 3px gold, inset -3px 0 3px gold, inset 0 3px 3px gold, inset 0 -3px 3px gold;
+  }
+}
+
+#bestSeller {
+  border: 3px solid gold;
+  animation: goldborder 2s linear infinite;
+}
