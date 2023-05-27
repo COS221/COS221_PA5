@@ -23,7 +23,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
     <link rel="stylesheet" href="styles/style.css" />
-    <title>Wines | Vineyard</title>
+    <title>Wineries | Vineyard</title>
   </head>
   <body style="padding-top: 230px; background-color: #00192b">
     <nav
@@ -90,16 +90,11 @@
       "
     >
       <div class="row">
-        <div class="col-4" style="padding-left: 30px">
-          <h1>Specific Wine</h1>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-4">
+        <div class="col-3">
           <img
-            src="img/hrw-default-300x300.jpg"
-            alt="hrw-default"
-            class="img-fluid"
+            src="img/vineyard-placeholder.jpg"
+            alt="vineyard-placeholder"
+            class="displayImg"
             style="
               margin: 15px;
               border-radius: 15px;
@@ -107,21 +102,20 @@
             "
           />
         </div>
-        <div class="col-3" style="margin-top: 100px">
-          <h2>$100.00</h2>
-          <a href="#" class="btn btn-primary" style="background-color: #00192b"
-            >Buy Now</a
-          >
+        <div class="col-4" style="margin-left: 50px; margin-top: 10px">
+          <ul style="list-style-type: none">
+            <li class="liTitle"><h1>Specific Winery</h1></li>
+            <li class="liAddress">42 Werner Street, Stellenbosch</li>
+            <li class="liDescription">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis iure
+              dolorem esse facilis in, perspiciatis repudiandae et ipsam? Enim
+              pariatur dolore ipsum nostrum id. Repellendus, dolor. Optio
+              laborum minus dolorem!
+            </li>
+          </ul>
         </div>
-      </div>
-      <div class="row">
-        <div class="col" style="margin-left: 20px">
-          <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti,
-            laudantium quam non, sapiente rem repudiandae voluptates modi cumque
-            eius enim itaque blanditiis nemo atque. Illo, voluptas quibusdam.
-            Qui, quibusdam tempora?
-          </p>
+        <div class="col-4">
+          <div id="map"></div>
         </div>
       </div>
     </div>
@@ -141,4 +135,16 @@
       </a>
     </div>
   </footer>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+
+  <script>
+    mapboxgl.accessToken =
+      "pk.eyJ1IjoiaGFzaC1zYWx0LXBlcHBlciIsImEiOiJjbGk1cjBwbHczNG92M2VudDhxa3lldXppIn0.kaCeMlQU5YjTDNIIzbTq4w";
+    var map = new mapboxgl.Map({
+      container: "map",
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [28.24, -25.75],
+      zoom: 15,
+    });
+  </script>
 </html>
