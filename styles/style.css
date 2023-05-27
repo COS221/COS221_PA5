@@ -13,6 +13,11 @@ body::before {
   color: #00192B;
 }
 
+.scrollReviews{
+  height: 300px;
+  overflow-y: scroll;
+}
+
 @keyframes goldborder {
   0% {
     border-color: gold;
