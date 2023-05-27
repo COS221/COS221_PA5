@@ -12,7 +12,7 @@ class Database
     private $username="u22575172";
     private $password="JFUE9QR83U0443DUEHU908R43";
 
-    private $db_name = 'u22575172';
+    private $db_name = 'u22575172_wine';
 
     private $conn;
 
