@@ -2,14 +2,20 @@ var xhr = new XMLHttpRequest();
 
 xhr.open('GET', 'https://api.example.com/wines', true);
 
+
+
 xhr.onload=function(){
-    if (this.status === 200) {
-        let objectData = JSON.parse(this.responseText); 
+    if (this.status === 200 ) {
+        let objectData = JSON.parse(this.responseText)['data']; 
+
+
 
         let row = document.querySelector('row');
         row.innerHTML = '';
+        
         data= ``;
         
+        //Create another loop to access each object
         for (value in objectData){
 
             data += `<div class="col-md">
