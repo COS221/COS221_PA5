@@ -1,9 +1,20 @@
-var xhr = new XMLHttpRequest();
+const xhr = new XMLHttpRequest();
+const url = 'http://localhost/COS221_PA5/api.php';
 
-xhr.open('GET', 'https://api.example.com/wines', true);
+var data = {
+  "type":"GetAllWineries",
+  "api_key":"123456",
+  "page": "index.php",
+  "search":{"BName":"Franschhoek Cellar"}, //Need to use this to somehow get the individual wine item after clicking on read more
+  "order":"desc",
+  //"limit":10,
+  "sort":"BName",
+  "fuzzy":false,
+  "return":"*"
+}
 
-xhr.onload=function(){
-    if (this.status === 200) {
+xhr.onreadystatechange = function(){
+  if (xhr.readyState == 4 && xhr.status == 200) {
         let objectData = JSON.parse(this.responseText); 
 
         let container = document.querySelector('.container');
@@ -11,7 +22,7 @@ xhr.onload=function(){
         data= ``;
         
         for (value in objectData){
-            
+
             data += `<div class="col-3">
             <img src="${objectData[value].data[0].Business_URL}" alt="vineyard-placeholder" class="displayImg" style="
                   margin: 15px;
@@ -43,4 +54,6 @@ xhr.onload=function(){
     }
 }
 
-xhr.send();
+xhr.open('POST', url, true)
+xhr.setRequestHeader('Content-type','application/json');
+xhr.send(JSON.stringify(data)); 

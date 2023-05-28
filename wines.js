@@ -1,10 +1,21 @@
-var xhr = new XMLHttpRequest();
+const xhr = new XMLHttpRequest();
+const url = 'http://localhost/COS221_PA5/api.php';
 
-xhr.open('GET', 'https://api.example.com/wines', true);
+var data = {
+  "type":"GetAllWines",
+  "api_key":"123456",
+  "page": "bruh",
+  //"search":{"wine_name":"Franschhoek Cellar"},
+  "order":"desc",
+  //"limit":10,
+  "sort":"Acidity",
+  "fuzzy":false,
+  "return":"*"
+}
 
-xhr.onload=function(){
-    if (this.status === 200) {
-        let objectData = JSON.parse(this.responseText); 
+xhr.onreadystatechange = function(){
+  if (xhr.readyState == 4 && xhr.status == 200) {
+      let objectData = JSON.parse(this.responseText); 
 
         let row = document.querySelector('row');
         row.innerHTML = '';
@@ -26,7 +37,7 @@ xhr.onload=function(){
                   <img src="${objectData[value].data[0].Wine_URL}" />
                 </div>
                 <h3 class="card-price" style="margin: 0px; margin-bottom: 15px">
-                ${objectData[value].data[0].Cost_per_bottle}
+                ${objectData[value].data[0].Name}
                 </h3>
                 <a href="wineSpec.php" class="btn btn-primary" style="background-color: #00192b; border: none">Learn
                   More</a>
@@ -42,4 +53,6 @@ xhr.onload=function(){
     }
 }
 
-xhr.send();
+xhr.open('POST', url, true)
+xhr.setRequestHeader('Content-type','application/json');
+xhr.send(JSON.stringify(data));  

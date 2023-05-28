@@ -1,9 +1,20 @@
-var xhr = new XMLHttpRequest();
+const xhr = new XMLHttpRequest();
+const url = 'http://localhost/COS221_PA5/api.php';
 
-xhr.open('GET', 'https://api.example.com/wines', true);
+var data = {
+  "type":"GetAllWines",
+  "api_key":"123456",
+  "page": "bruh",
+  "search":{"wine_name":"Franschhoek Cellar"}, //Need to use this to somehow get the individual wine item after clicking on read more
+  "order":"desc",
+  //"limit":10,
+  "sort":"Acidity",
+  "fuzzy":false,
+  "return":"*"
+}
 
-xhr.onload=function(){
-    if (this.status === 200) {
+xhr.onreadystatechange = function(){
+  if (xhr.readyState == 4 && xhr.status == 200) {
         let objectData = JSON.parse(this.responseText); 
 
         let container = document.querySelector('.container');
@@ -28,7 +39,7 @@ xhr.onload=function(){
                 <li class="liRating">
                   <h3>★★★★☆</h3>
                 </li>
-                <li class="liCategoryCultivar">${objectData[value].data[0].Category} ${objectData[value].data[0].Cultivars}</li>
+                <li class="liCategoryCultivar">${objectData[value].data.Category} ${objectData[value].data[0].Cultivars}</li>
                 <li class="liAlc">Alc: ${objectData[value].data[0].Alcohol}% pH${objectData[value].data[0].Acidity} TA: ${objectData[value].data[0].Tannin}</li>
                 <li class="liProd">${objectData[value].data[0].Producer}</li>
                 <li>
@@ -122,4 +133,6 @@ xhr.onload=function(){
     }
 }
 
-xhr.send();
+xhr.open('POST', url, true)
+xhr.setRequestHeader('Content-type','application/json');
+xhr.send(JSON.stringify(data));  
