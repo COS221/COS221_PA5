@@ -13,24 +13,26 @@ xhr.onload=function(){
         for (value in objectData){
 
             data += `<div class="col-md">
-                <div class="card" style="color: black">
-                <div class="card-body text-center">
-                    <div class="h1 mb-3">
-                    <img src="${objectData[value].image}" />
-                    </div>
-                    <h3 class="card-title mb-3">${objectData[value].name}</h3>
-                    <p class="card-text">
-                    ${objectData[value].description}
-                    </p>
-                    <a
-                    href="wineSpec.html"
-                    class="btn btn-primary"
-                    style="background-color: #00192b"
-                    >Read More</a
-                    >
+            <div class="card" style="color: black">
+              <div class="card-body text-center">
+                <h3 class="card-title" style="margin-top: 10px; margin-bottom: 0px">
+                  ${objectData[value].data.Name}
+                </h3>
+                <h8 class="card-cultivar">category | ${objectData[value].data.Category}</h8>
+                <h4 class="card-rating mb-3" style="margin-top: 0; padding-top: 0px">
+                  ★★★★☆
+                </h4>
+                <div class="card-img-container" style="border-radius: 5px">
+                  <img src="${objectData[value].Wine_URL}" />
                 </div>
-                </div>
-            </div>`
+                <h3 class="card-price" style="margin: 0px; margin-bottom: 15px">
+                ${objectData[value].price}
+                </h3>
+                <a href="wineSpec.php" class="btn btn-primary" style="background-color: #00192b; border: none">Learn
+                  More</a>
+              </div>
+            </div>
+          </div>`
         }
         row.innerHTML=data;
 
