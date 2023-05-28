@@ -29,9 +29,6 @@
           <li class="nav-item" style="padding-right: 25px">
             <a href="wineries.php" class="nav-link" style="color: #00192b">Explore Vineyards</a>
           </li>
-          <li class="nav-item" style="padding-right: 40px">
-            <input type="text" class="form-control" placeholder="Search anything..." />
-          </li>
           <img src="img\heart.png" alt="heart-icon" style="
                 width: 30px;
                 height: 30px;
@@ -65,7 +62,8 @@
             <h1>Specific Wine</h1>
           </li>
           <li class="liRating">
-            <h3>★★★★☆</h3>
+
+            <h3>★★★★☆ </h3>
           </li>
           <li class="liCategoryCultivar">Category & Cultivar</li>
           <li class="liAlc">Alc: 12% pH3.43 TA: 5.32</li>
@@ -75,6 +73,9 @@
           </li>
           <li>
             <a href="#" class="btn btn-primary" style="background-color: #00192b">Buy Now</a>
+            <a class="btn btn-primary" style="color: white; background-color:#00192b"
+              onclick="this.style.backgroundColor = this.style.backgroundColor === 'red' ? '#00192b' : 'red'">Favourite
+            </a>
           </li>
         </ul>
       </div>
@@ -83,6 +84,7 @@
         <ul class="scrollReviews nav-pills nav-stacked" style="list-style-type: none">
           <li>
             <h1>Reviews</h1>
+            <h5><a href="">Add Review</a></h5>
           </li>
           <li>
             <div class="review">
@@ -91,7 +93,8 @@
                   <h4>Username</h4>
                 </li>
                 <li>
-                  <h5>★★★☆☆</h5>
+                  <h5>★★★☆☆ </h5>
+
                 </li>
                 <li>
                   <p>

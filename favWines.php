@@ -11,7 +11,7 @@
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
   <link rel="stylesheet" href="styles/style.css" />
-  <title>Wines | Vineyard</title>
+  <title>Favourites| Vineyard</title>
 </head>
 
 <body style="padding-top: 150px">
@@ -102,6 +102,10 @@
   </script>
 
   <section class="p-5" style="background-color: #00192b; color: white">
+    <div>
+      <h1>Favourite Wines
+      </h1>
+    </div>
     <div class="container">
       <div class="row text-center g-4" style="padding-top: 25px">
         <div class="col-md">

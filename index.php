@@ -32,15 +32,17 @@
           <li class="nav-item" style="padding-right: 25px">
             <a href="wineries.php" class="nav-link" style="color: #00192b">Explore Vineyards</a>
           </li>
-          <li class="nav-item" style="padding-right: 40px">
-            <input type="text" class="form-control" placeholder="Search anything..." />
-          </li>
-          <img src="img\heart.png" alt="heart-icon" style="
+          <li>
+            <a href="favWines.php">
+              <img src="img\heart.png" alt="heart-icon" style="
                     width: 30px;
                     height: 30px;
                     margin-top: 5px;
                     margin-right: 20px;
                   " />
+            </a>
+
+          </li>
           <a href="login.php" class="btn btn-md" type="button" style="background-color: #00192b; color: white">
             Login
           </a>

@@ -29,9 +29,6 @@
           <li class="nav-item" style="padding-right: 25px">
             <a href="wineries.php" class="nav-link" style="color: #00192b">Explore Vineyards</a>
           </li>
-          <li class="nav-item" style="padding-right: 40px">
-            <input type="text" class="form-control" placeholder="Search anything..." />
-          </li>
           <img src="img\heart.png" alt="heart-icon" style="
                 width: 30px;
                 height: 30px;

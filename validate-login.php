@@ -34,7 +34,7 @@ function validateEmail()
 
 $host = 'wheatley.cs.up.ac.za';
 $username = "u22575172";
-$password = "HAMZAPASS";
+$password = "OXHR544YXMSFKLXGTK655UKTFR3Z7NKW";
 
 
 
