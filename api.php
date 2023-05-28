@@ -11,17 +11,6 @@ function isEmpty($param){
 $json =file_get_contents('php://input');
 $data = json_decode($json);  
 
-//var_dump("Testing");
-
-//this can be refactored later on, I could not get $_POST to work
-//ALSO, we can change the queries to use prepared statements
-//Apologies for teh bad indentations, The api may be verbose for now
-
-// $resultObject = new stdClass();
-// $resultObject->status = 'success';
-// $resultObject->timestamp = time();
-// $resultObject->data = [];
-
 function success($arr){ //place relevent headers
   
   header("HTTP/1.1 200 OK");
@@ -327,7 +316,46 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
         if ($GLOBALS['data']->type == "GetAllWines"){
           if (isset($GLOBALS['data']->page)){
             //var_dump("Bruh");
-            $sql = "SELECT * from wine";  //SQL
+            $table = "wine";
+            $sql = "SELECT * from wine";  //redundant
+
+            $valid  = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Business_ID','Name');
+
+            if (search($valid ) == false) {
+              # code...
+              $sql = "SELECT * FROM ".$table;
+            }
+            else
+              {
+                $sql = "SELECT * FROM ".$table. " WHERE ". search($valid) ;
+                //var_dump($sql);
+                // Prepare statement
+        
+                  if (fuzzy() == false) {
+                    # code...
+                    $sql = "SELECT ". select($possibleSelect). " FROM ".$table. " WHERE ". search($valid) ;
+                    }else{
+                        $sql = "SELECT ". select($possibleSelect). " FROM ".$table. " WHERE ". Fuzzysearch($valid) ;
+                    }
+      
+              }
+            // $sql = "SELECT ".select($possibleSelect)." FROM ".$table." ";    //Get relevant wine data
+            $possibleSort = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category' );
+
+            if (sortBy($possibleSort)) {
+              $sql= $sql. " ORDER BY ".$GLOBALS['data']->sort;
+    
+              if (orderBy()== false) {
+                $sql= $sql." ASC";
+              } else {
+                $sql= $sql." ".$GLOBALS['data']->order;
+              }
+            }
+
+            if (limit() !==false) {
+              $sql= $sql." LIMIT ".$GLOBALS['data']->limit;
+            }
+
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $count = $stmt->rowCount();
@@ -373,10 +401,6 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             $possibleSelect = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Name');
 
             $valid  = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Business_ID','Name');
-            // $where = whereClause($valid);
-            // if (isset($GLOBALS['data']->fuzzy) && $GLOBALS['data']->fuzzy==true){
-            //     $where = whereClauseFuzzy($valid);
-            // }
 
             if (search($valid ) == false) {
               # code...
@@ -413,7 +437,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
               $sql= $sql." LIMIT ".$GLOBALS['data']->limit;
             }
 
-            var_dump($sql);
+            //var_dump($sql);
 
             $stmt = $conn->prepare($sql);
             $stmt->execute();
@@ -459,7 +483,45 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
         else if ($GLOBALS['data']->type == "GetAllWineries"){
           if (isset($GLOBALS['data']->page)){
             //var_dump("Bruh");
+            $table = "business";
             $sql = "SELECT * from business";  //SQL
+            $valid  = array('Business_ID','BName','Business_URL','Website_URL','Weekday_open_time','Weekday_close_time','Weekend_open_time','Instagram','Twitter' ,'Facebook','Description','User_ID','Region_ID');
+
+            if (search($valid ) == false) {
+              # code...
+              $sql = "SELECT * FROM ".$table;
+            }
+            else
+              {
+                $sql = "SELECT * FROM ".$table. " WHERE ". search($valid) ;
+                //var_dump($sql);
+                // Prepare statement
+        
+                  if (fuzzy() == false) {
+                    # code...
+                    $sql = "SELECT * FROM ".$table. " WHERE ". search($valid) ;
+                    }else{
+                        $sql = "SELECT * FROM ".$table. " WHERE ". Fuzzysearch($valid) ;
+                    }
+      
+              }
+
+            $possibleSort =array('Business_ID','BName','Business_URL','Website_URL','Weekday_open_time','Weekday_close_time','Weekend_open_time','Instagram','Twitter' ,'Facebook','Description','User_ID','Region_ID');
+
+            if (sortBy($possibleSort)) {
+              $sql= $sql. " ORDER BY ".$GLOBALS['data']->sort;
+    
+              if (orderBy()== false) {
+                $sql= $sql." ASC";
+              } else {
+                $sql= $sql." ".$GLOBALS['data']->order;
+              }
+            }
+
+            if (limit() !==false) {
+              $sql= $sql." LIMIT ".$GLOBALS['data']->limit;
+            }
+
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $count = $stmt->rowCount();
@@ -501,10 +563,6 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             $possibleSelect = array('Business_ID','BName','Business_URL','Website_URL','Weekday_open_time','Weekday_close_time','Weekend_open_time','Instagram','Twitter' ,'Facebook','Description','User_ID','Region_ID');
 
             $valid  = array('Business_ID','BName','Business_URL','Website_URL','Weekday_open_time','Weekday_close_time','Weekend_open_time','Instagram','Twitter' ,'Facebook','Description','User_ID','Region_ID');
-            // $where = whereClause($valid);
-            // if (isset($GLOBALS['data']->fuzzy) && $GLOBALS['data']->fuzzy==true){
-            //     $where = whereClauseFuzzy($valid);
-            // }
 
             if (search($valid ) == false) {
               # code...
