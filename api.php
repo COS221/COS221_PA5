@@ -773,11 +773,10 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
 
             //get userID
             $sql = "SELECT UserID FROM user WHERE Email= '{$GLOBALS['data']->userEmail}';";
-            echo $sql;
+            
             $stmt = $GLOBALS['conn']->prepare($sql); 
             $stmt->execute();
 
-            var_dump($stmt->rowCount());
             //update user
             if($stmt->rowCount() >0){
                 $userID =$stmt->fetch(PDO::FETCH_ASSOC)["UserID"];
@@ -792,7 +791,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                 $stmt = $GLOBALS['conn']->prepare($sql); 
                 $stmt->execute();
 
-                if($stmt->rowCount() >0)
+                if($stmt->errorCode() == '00000')
                     success(array("status"=>"success"));
                 else
                     failure("unsucessful update");
