@@ -9,7 +9,7 @@ function isEmpty($param){
 }
 
 $json =file_get_contents('php://input');
-$data = json_decode($json);          
+$data = json_decode($json);  
 
 //var_dump("Testing");
 
@@ -44,7 +44,7 @@ echo json_encode($resultObject);
 }
 
 function failure($messsage){ //check for relevent headers
-  header("HTTP/1.1 200 OK");
+    header("HTTP/1.1 200 OK");
 	header("Content-Type: application/json");
 
   $resultObject = new stdClass();
@@ -314,15 +314,16 @@ function limit(){
 if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key == $apikey ) {   //validate APIkey
     # code...
    // echo("Test");
-    if (!isset($GLOBALS['data']->return)){
-        failure("Specify return please.");
-    }
+    //if (!isset($GLOBALS['data']->return)){
+    //    failure("Specify return please.");
+    //}
 
     // if (!isset($GLOBALS['data']->limit)){ //May end up enforcing a limit parameter in SQL queries, to speed up performance
     //     failure("Specify limit please.");
     // }
 
     if (isset($GLOBALS['data']->type)){
+
         if ($GLOBALS['data']->type == "GetAllWines"){
           if (isset($GLOBALS['data']->page)){
             //var_dump("Bruh");
@@ -454,10 +455,8 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
           }
            
         }
-
-        else 
         
-        if ($GLOBALS['data']->type == "GetAllWineries"){
+        else if ($GLOBALS['data']->type == "GetAllWineries"){
           if (isset($GLOBALS['data']->page)){
             //var_dump("Bruh");
             $sql = "SELECT * from business";  //SQL
@@ -578,17 +577,9 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                 failure("No businesses with this name were found"); 
               }
           }
-        }   
+        }
         
-        else 
-        
-        // if ($GLOBALS['data']->type == "CreateWinery"){  //I think we can just submit a form and do it in JS on the frontend-API, thoughts?
-
-        // }
-
-        // else 
-        
-        if ($GLOBALS['data']->type == "RateWine"){
+        else if ($GLOBALS['data']->type == "RateWine"){
 
           $sql = "Select * from wine_reviews WHERE UserID= '".$GLOBALS['data']->userID."' AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
           $stmt = $GLOBALS['conn']->prepare($sql); 
@@ -612,9 +603,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             }
         }
         
-        else 
-        
-        if ($GLOBALS['data']->type == "RateWinery"){
+        else if ($GLOBALS['data']->type == "RateWinery"){
           $sql = "Select * from business_reviews WHERE UserID= '".$GLOBALS['data']->userID."' AND Business_ID = ".$GLOBALS['data']->rate->Business_ID;
           $stmt = $GLOBALS['conn']->prepare($sql); 
           $stmt->execute();
@@ -637,7 +626,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             }
             
         }
-        //Later endpoints to be added here
+        
         else if ($GLOBALS['data']->type == "FavouriteWine"){
           if (isset($GLOBALS['data']->userID)){
             //var_dump("Bruh");
@@ -719,22 +708,389 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             failure("Error: please specify a return value (*_*)"); 
           }
             
-        } 
+        }       
 
-        // else if ($GLOBALS['data']->type == ""){  //template for adding more endpoints later
-       
-            
-        // }        
-        
-        
-        else{
-          failure("Error: Invalid Type parameter, please check spelling or ask the API team for assistance");
+    
+        else if($GLOBALS['data']->type == "updateUserInfo"){
+
+            //get userID
+            $sql = "SELECT UserID FROM user WHERE Email= '{$GLOBALS['data']->userEmail}';";
+            echo $sql;
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+
+            var_dump($stmt->rowCount());
+            //update user
+            if($stmt->rowCount() >0){
+                $userID =$stmt->fetch(PDO::FETCH_ASSOC)["UserID"];
+
+                $sql = "UPDATE user SET 
+                    First_name= '{$GLOBALS['data']->FirstName}',
+                    Middle_name= '{$GLOBALS['data']->MiddleName}', 
+                    Email= '{$GLOBALS['data']->userEmail}', 
+                    PhoneNumber= '{$GLOBALS['data']->Number}' 
+                    WHERE UserID= '{$userID}' ;";
+                
+                $stmt = $GLOBALS['conn']->prepare($sql); 
+                $stmt->execute();
+
+                if($stmt->rowCount() >0)
+                    success(array("status"=>"success"));
+                else
+                    failure("unsucessful update");
+            }else{
+                failure("no user with {$GLOBALS['data']->userEmail} exists");
+            }
         }
 
-  } else{
-      failure("Type not specified.");
-  }
+        else if($GLOBALS['data']->type == "updateUserRegion"){
 
+            //get userID
+            $sql = "SELECT Region_ID FROM region WHERE Country= '{$GLOBALS['data']->Country}' AND RegionName= '{$GLOBALS['data']->RegionName}';";
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+
+            $RegionID = $stmt->fetch(PDO::FETCH_ASSOC)['Region_ID'];
+
+            //location alredy in DB
+            if($stmt->rowCount() > 0){
+                $sql = "UPDATE user SET 
+                Region_id = '{$RegionID}' 
+                WHERE UserID = '{$GLOBALS['data']->userID}';";
+
+                $stmt = $GLOBALS['conn']->prepare($sql); 
+                $stmt->execute(); 
+            }else{  
+
+                //create location
+                $sql = "INSERT INTO region (`Country`,`RegionName`)
+                VALUES ( '{$GLOBALS['data']->Country}',
+                '{$GLOBALS['data']->RegionName}');";
+
+                $stmt = $GLOBALS['conn']->prepare($sql); 
+                $stmt->execute();
+
+                if($stmt->rowCount() > 0){
+                    
+                    //get location Region_ID
+                    $sql = "SELECT Region_ID FROM region WHERE Country= '{$GLOBALS['data']->Country}' AND RegionName= '{$GLOBALS['data']->RegionName}';";
+                    $stmt = $GLOBALS['conn']->prepare($sql); 
+                    $stmt->execute();
+        
+                    $RegionID = $stmt->fetch(PDO::FETCH_ASSOC)["Region_ID"];
+
+                    //add location to buisiness
+                    $sql = "UPDATE user SET 
+                    Region_id = '{$RegionID}'
+                    WHERE userID = '{$GLOBALS['data']->userID}' ;";
+
+                    $stmt = $GLOBALS['conn']->prepare($sql); 
+                    $stmt->execute();
+                }
+            }
+
+            success(array("status"=>"success"));
+        }
+
+        else if($GLOBALS['data']->type == "getAllBuisinessWines"){
+            
+            //get businessID
+            $sql = "SELECT Business_ID FROM business WHERE BName= '{$GLOBALS['data']->businessName}';";
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+
+            if($stmt->rowCount() == 0)
+                failure("no business with BName {$GLOBALS['data']->businessName} in DB");
+
+            //return wines
+            if( $stmt->rowCount() >0){
+                $businessID =$stmt->fetch(PDO::FETCH_ASSOC)["Business_ID"];
+                
+                $sql = "SELECT * FROM wine WHERE Business_ID= '{$businessID}';";  
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+        
+                if($stmt->rowCount() > 0) {
+                    $post_arr = array();
+                    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        extract($row);
+                        $post_item = array(
+                            'WineID' => $row['WineID'],
+                            'Name' => $row['Name'],
+                            'Body' => $row['Body'],
+                            'Alcohol' => $row['Alcohol'],
+                            'Tannin' => $row['Tannin'],
+                            'Acidity' => $row['Acidity'],
+                            'Sweetness' => $row['Sweetness'],
+                            'Producer' => $row['Producer'],
+                            'Vintage' => $row['Vintage'],
+                            'Wine_URL' => $row['Wine_URL'],
+                            'Volume' => $row['Volume'],
+                            'Cultivars' => $row['Cultivars'],
+                            'Category' => $row['Category'],
+                            'Description' => $row['Description'],
+                            'Cost_per_bottle' => $row['Cost_per_bottle'],
+                            'Cost_per_glass' => $row['Cost_per_glass'],
+                            'Price_Category' => $row['Price_Category'],
+                            'Business_ID' => $row['Business_ID']
+                        );
+
+                        array_push($post_arr, $post_item);
+                    }
+                    success($post_arr);
+                }else{
+                    failure("No wine associated with business {$GLOBALS['data']->businessName} in DB");
+                }
+            }
+        }
+
+        else if($GLOBALS['data']->type == "updateWine"){
+            $sql = "UPDATE wine SET 
+                Name= '{$GLOBALS['data']->Name}',
+                Body= '{$GLOBALS['data']->Body}',
+                Alcohol= '{$GLOBALS['data']->Alcohol}',
+                Tannin= '{$GLOBALS['data']->Tannin}',
+                Acidity= '{$GLOBALS['data']->Acidity}',
+                Sweetness= '{$GLOBALS['data']->Sweetness}',
+                Producer= '{$GLOBALS['data']->Producer}',
+                Vintage= '{$GLOBALS['data']->Vintage}',
+                Volume= '{$GLOBALS['data']->Volume}',
+                Cultivars= '{$GLOBALS['data']->Cultivars}',
+                Category= '{$GLOBALS['data']->Category}',
+                Description= '{$GLOBALS['data']->Description}',
+                Cost_per_bottle= '{$GLOBALS['data']->Cost_per_bottle}',
+                Cost_per_glass= '{$GLOBALS['data']->Cost_per_glass}',
+                Price_Category= '{$GLOBALS['data']->Price_Category}'
+                WHERE WineID= '{$GLOBALS['data']->WineID}';";
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+
+            if($stmt->errorCode() != '00000')
+                failure("no wine with id {$GLOBALS['data']->WineID} in DB");
+            else
+                success(array("status"=>"success"));
+        }
+
+        else if($GLOBALS['data']->type == "removeWine"){
+            $sql ="DELETE FROM wine WHERE WineID= '{$GLOBALS['data']->wineId}';";
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+            
+            if($stmt->errorCode() != '00000')
+                failure("no wine with id {$GLOBALS['data']->wineId} in DB");
+            else
+                success(array("status"=>"success"));
+        }
+
+        else if($GLOBALS['data']->type == "addWine"){
+            $sql = "INSERT INTO wine (`Name`, `Wine_URL` ,`Body`,`Alcohol`,`Tannin`,`Acidity`,`Sweetness`,`Producer`,`Vintage`, `Volume`, `Cultivars`, `Category`, `Description`, `Cost_per_bottle`, `Cost_per_glass`, `Price_Category`,`Business_ID`)
+                VALUES ( '{$GLOBALS['data']->Name}',
+                '{$GLOBALS['data']->Wine_URL}',
+                '{$GLOBALS['data']->Body}',
+                '{$GLOBALS['data']->Alcohol}',
+                '{$GLOBALS['data']->Tannin}',
+                '{$GLOBALS['data']->Acidity}',
+                '{$GLOBALS['data']->Sweetness}',
+                '{$GLOBALS['data']->Producer}',
+                '{$GLOBALS['data']->Vintage}',
+                '{$GLOBALS['data']->Volume}',
+                '{$GLOBALS['data']->Cultivars}',
+                '{$GLOBALS['data']->Category}',
+                '{$GLOBALS['data']->Description}',
+                '{$GLOBALS['data']->Cost_per_bottle}',
+                '{$GLOBALS['data']->Cost_per_glass}',
+                '{$GLOBALS['data']->Price_Category}',
+                '{$GLOBALS['data']->BusinessID}' );";
+
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+
+            if($stmt->errorCode() != '00000')
+                failure("no Business with id {$GLOBALS['data']->BusinessID} in DB");
+            else
+                success(array("status"=>"success"));
+        }
+        
+        else if($GLOBALS['data']->type == "updateBusinessInfo"){
+
+            $sql = "UPDATE business SET
+                BName= '{$GLOBALS['data']->BName}',
+                Business_URL= '{$GLOBALS['data']->Business_URL}', 
+                Website_URL= '{$GLOBALS['data']->Website_URL}', 
+                Weekday_open_time= '{$GLOBALS['data']->Weekday_open_time}',
+                Weekday_close_time= '{$GLOBALS['data']->Weekday_close_time}', 
+                Weekend_open_time= '{$GLOBALS['data']->Weekend_open_time}', 
+                Weekend_close_time= '{$GLOBALS['data']->Weekend_close_time}', 
+                Instagram= '{$GLOBALS['data']->Instagram}', 
+                Twitter= '{$GLOBALS['data']->Twitter}', 
+                Facebook= '{$GLOBALS['data']->Facebook}', 
+                Description= '{$GLOBALS['data']->Description}' 
+                WHERE Business_ID= {$GLOBALS['data']->BusinessID};";
+                
+                
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+            if($stmt->errorCode() != '00000')
+                failure("no Business with id {$GLOBALS['data']->BusinessID} in DB");
+            else
+                success(array("status"=>"success"));
+        }
+
+        else if($GLOBALS['data']->type == "getBusinessInfo"){
+            
+            //get businessID
+            $sql = "SELECT Business_ID, Region_ID FROM business WHERE BName= '{$GLOBALS['data']->businessName}';";
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+            
+            if($stmt->rowCount() == 0)
+                failure("no business with {$GLOBALS['data']->businessName} in DB");
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($stmt->rowCount() > 0) {
+                $businessID =$result['Business_ID'];
+                $regionID =$result['Region_ID'];
+                
+                //get region info
+                $sql = "SELECT * FROM region WHERE Region_ID= {$regionID};";  
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+
+                if($stmt->rowCount() == 0)
+                    failure("no region with Region_ID {$regionID} in DB");
+
+                $regionInfo= $stmt->fetch(PDO::FETCH_ASSOC);
+
+                //get buisiness info
+                $sql = "SELECT * FROM business WHERE Business_ID= {$businessID}"; 
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if($stmt->rowCount() == 0)
+                    failure("no business with Business_ID {$businessID} in DB");
+
+                $arr = array(
+                    'Business_ID' => $row['Business_ID'],
+                    'BName' => $row['BName'],
+                    'Business_URL' => $row['Business_URL'],
+                    'Website_URL' => $row['Website_URL'],
+                    'Weekday_open_time' => $row['Weekday_open_time'],
+                    'Weekday_close_time' => $row['Weekday_close_time'],
+                    'Weekend_open_time' => $row['Weekend_open_time'],
+                    'Weekend_close_time' => $row['Weekend_close_time'],
+                    'Instagram' => $row['Instagram'],
+                    'Twitter' => $row['Twitter'],
+                    'Facebook' => $row['Facebook'],
+                    'Description' => $row['Description'],
+                    'Country' => $regionInfo['Country'],
+                    'RegionName' => $regionInfo['RegionName'],
+                    'Latitude' => $regionInfo['Latitude'],
+                    'Longitude' => $regionInfo['Longitude']
+                );
+
+                success($arr);
+            }
+        }
+
+        else if($GLOBALS['data']->type == "updateBusinessRegion"){
+            
+            $sql = "SELECT Region_ID FROM region WHERE Country= '{$GLOBALS['data']->Country}' AND RegionName= '{$GLOBALS['data']->RegionName}';";
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+
+            $RegionID = $stmt->fetch(PDO::FETCH_ASSOC)['Region_ID'];
+        
+            //location alredy in DB
+            if($stmt->rowCount() > 0){
+                $sql = "UPDATE business SET 
+                Region_ID = $RegionID
+                WHERE Business_ID = {$GLOBALS['data']->BusinessID};";
+
+                $stmt = $GLOBALS['conn']->prepare($sql); 
+                $stmt->execute();
+            }else{  //location not in DB
+                
+                //create location
+                $sql = "INSERT INTO region (`Country`,`RegionName`,`Latitude`,`Longitude`)
+                        VALUES ( '{$GLOBALS['data']->Country}',
+                        '{$GLOBALS['data']->RegionName}',
+                        '{$GLOBALS['data']->Latitude}',
+                        '{$GLOBALS['data']->Longitude}');";
+                
+                $stmt = $GLOBALS['conn']->prepare($sql); 
+                $stmt->execute();
+
+                if($stmt->rowCount() > 0){
+                    
+                    //get location Region_ID
+                    $sql = "SELECT Region_ID FROM region WHERE Country= '{$GLOBALS['data']->Country}' AND RegionName= '{$GLOBALS['data']->RegionName}'";
+                    $stmt = $GLOBALS['conn']->prepare($sql); 
+                    $stmt->execute();
+        
+                    $RegionID = $stmt->fetch(PDO::FETCH_ASSOC)["Region_ID"];
+
+                    //add location to buisiness
+                    $sql = "UPDATE business SET 
+                    Region_ID = $RegionID
+                    WHERE Business_ID = {$GLOBALS['data']->BusinessID} ;";
+
+                    $stmt = $GLOBALS['conn']->prepare($sql); 
+                    $stmt->execute();
+                }
+    
+            }
+
+            success(array("status"=>"success"));
+        }
+
+        else if($GLOBALS['data']->type == "getUserInfo"){
+            $sql = "SELECT * FROM user WHERE Email= '{$GLOBALS['data']->userEmail}';";
+            
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+            $result1 = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($stmt->rowCount() == 0)
+                failure("no user with {$GLOBALS['data']->userEmail} in DB");
+
+            $sql = "SELECT Country, RegionName FROM region WHERE Region_ID= '{$result1['Region_id']}';";
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+            
+            $result2 = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($stmt->rowCount() > 0) {
+    
+                $arr = array(
+                    'UserID' => $result1['UserID'],
+                    'First_name' => $result1['First_name'],
+                    'Middle_name' => $result1['Middle_name'],
+                    'Last_name' => $result1['Last_name'],
+                    'Password' => $result1['Password'],
+                    'Email' => $result1['Email'],
+                    'PhoneNumber' => $result1['PhoneNumber'],
+                    'Country' => $result2['Country'],
+                    'RegionName' => $result2['RegionName']
+                );
+
+                success($arr);
+            }else {
+                failure("no region with {$result1['Region_id']} exists");
+            }
+        }
+        
+        else{
+            failure("Error: Invalid Type parameter, please check spelling or ask the API team for assistance");
+        }
+
+    } else{
+        failure("Type not specified.");
+    }
+    
+    //UNCOMMENT WHEN DONE: error_reporting(E_ERROR | E_PARSE);
   }
 
 ?>

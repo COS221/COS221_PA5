@@ -10,9 +10,9 @@ class Database
 
     private $host = 'wheatley.cs.up.ac.za';
     private $username="u22575172";
-    private $password="JFUE9QR83U0443DUEHU908R43";
+    private $password="OXHR544YXMSFKLXGTK655UKTFR3Z7NKW";
 
-    private $db_name = 'u22575172';
+    private $db_name = 'u22575172_wine';
 
     private $conn;
 
