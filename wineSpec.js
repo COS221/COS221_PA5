@@ -13,36 +13,104 @@ xhr.onload=function(){
         for (value in objectData){
 
             data += `<div class="row">
-            <div class="col-4" style="padding-left: 30px">
-              <h1>${objectData[value].name}</h1>
+            <div class="col-3">
+              <img src="img/hrw-default-300x300.jpg" alt="hrw-default" class="img-fluid" style="
+                    margin: 15px;
+                    border-radius: 15px;
+                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+                  " />
             </div>
-          </div>`
-            
-            data += `<div class="row">
+            <div class="col-4" style="margin-left: 50px; margin-top: 10px">
+              <ul style="list-style-type: none">
+                <li class="liTitle">
+                  <h1>${objectData[value].data.Name}</h1>
+                </li>
+                <li class="liRating">
+                  <h3>★★★★☆</h3>
+                </li>
+                <li class="liCategoryCultivar">${objectData[value].data.Category} ${objectData[value].data.Cultivars}</li>
+                <li class="liAlc">Alc: ${objectData[value].data.Alcohol}% pH${objectData[value].data.Acidity} TA: ${objectData[value].data.Tannin}</li>
+                <li class="liProd">${objectData[value].data.Producer}</li>
+                <li>
+                  <h2 style="margin-top: 30px">R${objectData[value].data.Cost_per_bottle}</h2>
+                </li>
+                <li>
+                  <a href="#" class="btn btn-primary" style="background-color: #00192b">Buy Now</a>
+                </li>
+              </ul>
+            </div>
+      
             <div class="col-4">
-              <img
-                src="${objectData[value].image}"
-                alt="hrw-default"
-                class="img-fluid"
-                style="
-                  margin: 15px;
-                  border-radius: 15px;
-                  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-                "
-              />
-            </div>
-            <div class="col-3" style="margin-top: 100px">
-              <h2>${objectData[value].price}</h2>
-              <a href="#" class="btn btn-primary" style="background-color: #00192b"
-                >Buy Now</a
-              >
-            </div>
-          </div>
-          <div class="row">
-            <div class="col" style="margin-left: 20px">
-              <p>
-              ${objectData[value].description}
-              </p>
+              <ul class="scrollReviews nav-pills nav-stacked" style="list-style-type: none">
+                <li>
+                  <h1>Reviews</h1>
+                </li>
+                <li>
+                  <div class="review">
+                    <ul style="list-style-type: none">
+                      <li>
+                        <h4>Username</h4>
+                      </li>
+                      <li>
+                        <h5>★★★☆☆</h5>
+                      </li>
+                      <li>
+                        <p>
+                          Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                          Facilis aperiam consequatur natus recusandae dicta numquam
+                          inventore perferendis magnam deserunt neque doloremque
+                          dignissimos aliquid, vitae doloribus earum architecto
+                          illum. Sequi, reiciendis?
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+      
+                <li>
+                  <div class="review">
+                    <ul style="list-style-type: none">
+                      <li>
+                        <h4>Username</h4>
+                      </li>
+                      <li>
+                        <h5>★★★☆☆</h5>
+                      </li>
+                      <li>
+                        <p>
+                          Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                          Facilis aperiam consequatur natus recusandae dicta numquam
+                          inventore perferendis magnam deserunt neque doloremque
+                          dignissimos aliquid, vitae doloribus earum architecto
+                          illum. Sequi, reiciendis?
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+      
+                <li>
+                  <div class="review">
+                    <ul style="list-style-type: none">
+                      <li>
+                        <h4>Username</h4>
+                      </li>
+                      <li>
+                        <h5>★★★☆☆</h5>
+                      </li>
+                      <li>
+                        <p>
+                          Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                          Facilis aperiam consequatur natus recusandae dicta numquam
+                          inventore perferendis magnam deserunt neque doloremque
+                          dignissimos aliquid, vitae doloribus earum architecto
+                          illum. Sequi, reiciendis?
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>`
         }

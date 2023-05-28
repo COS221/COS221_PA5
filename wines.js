@@ -23,10 +23,10 @@ xhr.onload=function(){
                   ★★★★☆
                 </h4>
                 <div class="card-img-container" style="border-radius: 5px">
-                  <img src="${objectData[value].Wine_URL}" />
+                  <img src="${objectData[value].data.Wine_URL}" />
                 </div>
                 <h3 class="card-price" style="margin: 0px; margin-bottom: 15px">
-                ${objectData[value].price}
+                ${objectData[value].data.Cost_per_bottle}
                 </h3>
                 <a href="wineSpec.php" class="btn btn-primary" style="background-color: #00192b; border: none">Learn
                   More</a>
