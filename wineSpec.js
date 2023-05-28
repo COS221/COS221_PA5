@@ -23,16 +23,16 @@ xhr.onload=function(){
             <div class="col-4" style="margin-left: 50px; margin-top: 10px">
               <ul style="list-style-type: none">
                 <li class="liTitle">
-                  <h1>${objectData[value].data.Name}</h1>
+                  <h1>${objectData[value].data[0].Name}</h1>
                 </li>
                 <li class="liRating">
                   <h3>★★★★☆</h3>
                 </li>
-                <li class="liCategoryCultivar">${objectData[value].data.Category} ${objectData[value].data.Cultivars}</li>
-                <li class="liAlc">Alc: ${objectData[value].data.Alcohol}% pH${objectData[value].data.Acidity} TA: ${objectData[value].data.Tannin}</li>
-                <li class="liProd">${objectData[value].data.Producer}</li>
+                <li class="liCategoryCultivar">${objectData[value].data[0].Category} ${objectData[value].data[0].Cultivars}</li>
+                <li class="liAlc">Alc: ${objectData[value].data[0].Alcohol}% pH${objectData[value].data[0].Acidity} TA: ${objectData[value].data[0].Tannin}</li>
+                <li class="liProd">${objectData[value].data[0].Producer}</li>
                 <li>
-                  <h2 style="margin-top: 30px">R${objectData[value].data.Cost_per_bottle}</h2>
+                  <h2 style="margin-top: 30px">R${objectData[value].data[0].Cost_per_bottle}</h2>
                 </li>
                 <li>
                   <a href="#" class="btn btn-primary" style="background-color: #00192b">Buy Now</a>

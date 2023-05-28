@@ -26,12 +26,12 @@ xhr.onload=function(){
                         margin: 15px;
                         border-radius: 15px;
                         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-                      " src="${objectData[value].data.Business_URL}" />
+                      " src="${objectData[value].data[0].Business_URL}" />
                 </div>
-                <h3 class="card-title mb-3">${objectData[value].data.BName}</h3>
+                <h3 class="card-title mb-3">${objectData[value].data[0].BName}</h3>
                 <p>Region</p>
                 <p class="card-text">
-                ${objectData[value].data.Description}
+                ${objectData[value].data[0].Description}
                 </p>
                 <a href="wineriesSpec.php" class="btn btn-primary" style="background-color: #00192b">Read More</a>
               </div>

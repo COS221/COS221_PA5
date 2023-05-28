@@ -16,17 +16,17 @@ xhr.onload=function(){
             <div class="card" style="color: black">
               <div class="card-body text-center">
                 <h3 class="card-title" style="margin-top: 10px; margin-bottom: 0px">
-                  ${objectData[value].data.Name}
+                  ${objectData[value].data[0].Name}
                 </h3>
-                <h8 class="card-cultivar">category | ${objectData[value].data.Category}</h8>
+                <h8 class="card-cultivar">category | ${objectData[value].data[0].Category}</h8>
                 <h4 class="card-rating mb-3" style="margin-top: 0; padding-top: 0px">
                   ★★★★☆
                 </h4>
                 <div class="card-img-container" style="border-radius: 5px">
-                  <img src="${objectData[value].data.Wine_URL}" />
+                  <img src="${objectData[value].data[0].Wine_URL}" />
                 </div>
                 <h3 class="card-price" style="margin: 0px; margin-bottom: 15px">
-                ${objectData[value].data.Cost_per_bottle}
+                ${objectData[value].data[0].Cost_per_bottle}
                 </h3>
                 <a href="wineSpec.php" class="btn btn-primary" style="background-color: #00192b; border: none">Learn
                   More</a>
