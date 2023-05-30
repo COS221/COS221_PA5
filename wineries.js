@@ -1,8 +1,3 @@
-
-
-
-    
-
 function populateExploreWineries() {
   const xhr = new XMLHttpRequest();
   const url = "http://localhost/COS221_PA5/api.php";
