@@ -7,104 +7,94 @@ if (!isset($_SESSION)) {
 <!DOCTYPE html>
 <html>
 <style>
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-    border-radius: 25px;
-  }
+  @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
   * {
     box-sizing: border-box;
   }
 
-  input {
-    width: 100%;
-    padding: 15px;
-    margin: 5px 0 22px 0;
-    border: none;
-    background: cornsilk;
-    border-radius: 25px;
+  body {
+    background-image: url(img/backgroundMountain.jpg);
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+    margin: -20px 0 50px;
   }
 
-  input:focus {
-    background-color: #ddd;
-    outline: none;
+  h1 {
+    font-weight: bold;
+    margin: 0;
   }
 
-  button:hover {
-    border: 1px black;
-    box-shadow: 0 0 5px black,
-      0 0 5px black,
-      0 0 5px black,
-      0 0 5px black;
+  h2 {
+    text-align: center;
+  }
 
+  p {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+  }
+
+  span {
+    font-size: 12px;
+  }
+
+  a {
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
   }
 
   button {
-    background-color: forestgreen;
-    color: whitesmoke;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    border-radius: 20px;
+    background-color: #00192b;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
+  }
+
+
+  form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
+  }
+
+  input {
+    background-color: #eee;
+    border: none;
+    padding: 12px 15px;
     margin: 8px 0;
-
-    cursor: pointer;
-    width: 40%;
-    opacity: 0.9;
-    font-size: large;
-
-    border-radius: 25px;
+    width: 100%;
   }
 
   .container {
-    padding: 50px;
-    border-radius: 25px;
-  }
-
-  .cancelbtn {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background-color: red;
-  }
-
-  .cancelbtn,
-  .signupbtn {
-    width: 100%;
-  }
-
-  .center-stage {
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    /*overflow-y: none; */
-    background-color: rgb(83, 72, 58);
-    background-blend-mode: multiply;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.3)), url("https://images.unsplash.com/photo-1595878715977-2e8f8df18ea8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80");
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
-
-
-  .center-stage-content {
-
-    background-color: #fefefe;
-    margin: 5% auto 15% auto;
-    border: 1px solid #888;
-    width: 80%;
-
-    /* box-shadow: 0 0 50px darkorange,
-                  0 0 15px black,
-                  0 0 60px black,
-                  0 0 20px black; */
-
-    border-radius: 25px;
-
-  }
-
-  hr {
-    border: 1px solid grey;
-    margin-bottom: 25px;
+    padding-top: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+      0 10px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
   }
 </style>
 
@@ -117,16 +107,19 @@ if (!isset($_SESSION)) {
         <p>Welcome to Vineyard</p>
         <hr>
 
-        <label for="email"><b>Email</b></label>
-        <input type="text" placeholder="Enter Email" name="email" id="email" onfocusout="validateMail()" required>
+        <label for="email"><b>Email</b></label><br>
+        <input type="text" style="width:400px" placeholder="Enter Email" name="email" id="email"
+          onfocusout="validateMail()" required><br>
 
-        <label for="pass"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="pass" id="pass1" minlength="8" required>
+        <label for="pass"><b>Password</b></label><br>
+        <input type="password" style="width:400px" placeholder="Enter Password" name="pass" id="pass1" minlength="8"
+          required>
 
-        Are you not a member?👀 <a href="signup.php" style="color:cornflowerblue"><br> Sign up</a>
         <div class="clearfix">
           <!-- <button type="button" onclick="goHome()"  class='cancelbtn'>Cancel</button> -->
-          <button type="button" class="signupbtn" id="signup" name="submit" onclick="sub()">Login</button>
+          <button type="button" style="margin-top:20px; margin-bottom:10px" class="signupbtn" id="signup" name="submit"
+            onclick="sub()">Login</button>
+          <a href="signup.php" style="margin-top:20px"><br>Sign up</a>
         </div>
       </div>
     </form>
