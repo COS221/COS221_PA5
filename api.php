@@ -13,8 +13,9 @@ $data = json_decode($json);
 
 function success($arr){ //place relevent headers
   
-  header("HTTP/1.1 200 OK");
-	header("Content-Type: application/json");
+    header("HTTP/1.1 200 OK");
+    header("Content-Type: application/json");
+    header("Access-Control-Allow-Origin: *");
 $resultObject = new stdClass();
 $resultObject->status = 'success';
 $resultObject->timestamp = time();
@@ -25,6 +26,7 @@ echo json_encode($resultObject);
 function response($success, $message = ""){
 	header("HTTP/1.1 200 OK");
 	header("Content-Type: application/json");
+    header("Access-Control-Allow-Origin: *");
 	
 $resultObject = new stdClass();
 $resultObject->status = $success;
@@ -1009,6 +1011,28 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                 $businessID =$result['Business_ID'];
                 $regionID =$result['Region_ID'];
                 
+                //get Buisiness numbers
+                $sql = "SELECT BNumber FROM bnumber WHERE BusinessID= {$businessID};";
+                $stmt = $GLOBALS['conn']->prepare($sql); 
+                $stmt->execute();
+
+                $numbers = array();
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    array_push($numbers, $row['BNumber']);
+                }
+                
+                //get Buisiness numbers
+                $sql = "SELECT BEmail FROM bemail WHERE BusinessID= {$businessID};";
+                $stmt = $GLOBALS['conn']->prepare($sql); 
+                $stmt->execute();
+                
+                $emails = array();
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    array_push($emails, $row['BEmail']);
+                }
+
                 //get region info
                 $sql = "SELECT * FROM region WHERE Region_ID= {$regionID};";  
                 $stmt = $conn->prepare($sql);
@@ -1045,7 +1069,9 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                     'Country' => $regionInfo['Country'],
                     'RegionName' => $regionInfo['RegionName'],
                     'Latitude' => $regionInfo['Latitude'],
-                    'Longitude' => $regionInfo['Longitude']
+                    'Longitude' => $regionInfo['Longitude'],
+                    'Emails' => $emails,
+                    'Numbers' => $numbers
                 );
 
                 success($arr);
