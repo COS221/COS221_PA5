@@ -42,7 +42,7 @@
             <a href="wineries.php" class="nav-link" style="color: #00192b">Explore Vineyards</a>
           </li>
           <li class="nav-item" style="padding-right: 40px">
-            <input type="text" class="form-control" placeholder="Search anything..." />
+            <input type="text" class="form-control" placeholder="Search anything..." onkeypress="search(event)" />
           </li>
           <img src="img\heart.png" alt="heart-icon" style="
                 width: 30px;

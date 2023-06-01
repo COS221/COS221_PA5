@@ -306,3 +306,81 @@ function executeFilter(option) {
 
 }
 
+// Search function
+//const search = (event) => {
+  function search(event){
+    const xhr = new XMLHttpRequest();
+    const url = "http://localhost/COS221_PA5/api.php";
+  
+    if (event.keyCode === 13) {
+  
+      event.preventDefault();
+      const userInput =(event.target.value).toLowerCase();
+        
+      var data = {
+      type: "GetAllWines",
+      api_key: "123456",
+      page: "bruh",
+      //"search":{"wine_name":"Franschhoek Cellar"},
+      order: "desc",
+      //"limit":10,
+      sort: "Acidity",
+      fuzzy: false,
+      return: "*",
+    };
+  
+    xhr.onreadystatechange = function () {
+  
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        let objectData = JSON.parse(this.responseText);
+  
+        var row = document.querySelector(".row");
+  
+        data = ``;
+  
+        for (i = 0; i < objectData.data.length; i++) {
+          var wineName=(objectData.data[i].Name).toLowerCase();
+          
+          if(wineName.indexOf(userInput)!==-1)
+          {
+            //alert(objectData.data[i].WineID);
+            var WineName = objectData.data[i].Name;
+            var underscoredName = WineName.replace(/\s/g, "_"); //Wine Name spaces replaced with underscore.
+            data += `<div class="col-md" >
+                  <div class="card" style="color: black">
+                    <div class="card-body text-center">
+                      <h5 class="card-title" style="margin-top: 10px; margin-bottom: 0px">
+                        ${objectData.data[i].Name}
+                      </h5>
+                      <h8 class="card-cultivar">category | ${objectData.data[i].Category}</h8>
+                      <h4 class="card-rating mb-3" style="margin-top: 0; padding-top: 0px">
+                        ★★★★☆
+                      </h4>
+                      <div class="card-img-container" style="border-radius: 5px;">
+                        <img src="${objectData.data[i].Wine_URL}" style="width: 230px; height: 210px;"/>
+                      </div>
+                      <h3 class="card-price" style="margin: 0px; margin-bottom: 15px"> R
+                      ${objectData.data[i].Cost_per_bottle}
+                      </h3>
+                      <button class="ourSpecButton btn btn-primary " id="${underscoredName}" data-bs-toggle="modal" data-bs-target="#myModal" style="background-color: #00192b;">Learn More</button>
+                    </div>
+                  </div>
+                </div>`;
+          }
+        }
+  
+        row.innerHTML = data;
+      } 
+      else {
+        console.log("Api link not accessible.");
+      }
+    };
+  
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(JSON.stringify(data));
+  }
+  }
+  
+  
+  

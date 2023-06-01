@@ -136,3 +136,82 @@ document.addEventListener("click", function (event) {
   }
 });
 
+// Search function
+//const search = (event) => {
+  function search(event){
+    const xhr = new XMLHttpRequest();
+    const url = "http://localhost/COS221_PA5/api.php";
+  
+    if (event.keyCode === 13) {
+  
+      event.preventDefault();
+      const userInput =(event.target.value).toLowerCase();
+        
+      var data = {
+        type: "GetAllWineries",
+        api_key: "123456",
+        page: "index.php",
+        //"search":{"BName":"Franschhoek Cellar"},
+        order: "desc",
+        //"limit":10,
+        sort: "BName",
+        fuzzy: false,
+        return: "*",
+      };
+  
+    xhr.onreadystatechange = function () {
+  
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        let objectData = JSON.parse(this.responseText);
+  
+        var row = document.querySelector(".row");
+  
+        data = ``;
+  
+        for (i = 0; i < objectData.data.length; i++) {
+  
+          var wineryName=(objectData.data[i].BName).toLowerCase();
+      
+          if(wineryName.indexOf(userInput)!==-1)
+          {
+            var WineryName = objectData.data[i].BName;
+            var underscoredWineryName = WineryName.replace(/\s/g, "_");
+            data += `<div class="col-md">
+                  <div class="card" style="color: black; width: 500px;">
+                    <div class="card-body text-center">
+                      <div class="h1 mb-3">
+                        <img alt="hrw-default" class="displayImg" style="
+                              margin: 15px;
+                              border-radius: 15px;
+                              width: 250px;
+                              height: 210px;
+                              box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+                            " src="${objectData.data[i].Business_URL}" />
+                      </div>
+                      <h5 class="card-title mb-3">${objectData.data[i].BName}</h5>
+                      <p>Region</p>
+                      <p class="card-text">
+                      ${objectData.data[i].Description}
+                      </p>
+                      <button class="ourSpecButton btn btn-primary" id="${underscoredWineryName}" data-bs-toggle="modal" data-bs-target="#myModal" style="background-color: #00192b;">Learn More</button>
+                    </div>
+                  </div>
+                </div>`;
+          }
+        }
+  
+        row.innerHTML = data;
+      } 
+      else {
+        console.log("Api link not accessible.");
+      }
+    };
+  
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(JSON.stringify(data));
+  }
+  }
+  
+  
+
