@@ -688,9 +688,12 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
         }
         
         else if ($GLOBALS['data']->type == "FavouriteWine"){
-          if (isset($GLOBALS['data']->userID)){
+          if (isset($GLOBALS['data']->UserID)){
             //var_dump("Bruh");
-            $sql = "SELECT fav.WineID, fav.UserID, w.Name, w.Vintage, w.Producer, w.Category, w.Cultivars, w.Description, w.Cost_per_bottle FROM favourite_wine as fav INNER JOIN wine as w ON w.WineID=fav.WineID WHERE fav.UserID=".$GLOBALS['data']->userID;
+            $sql = "SELECT fav.WineID, fav.UserID, w.Name, w.Vintage, w.Producer, w.Category, w.Cultivars, w.Description, w.Cost_per_bottle FROM favourite_wine as fav INNER JOIN wine as w ON w.WineID=fav.WineID WHERE fav.UserID=".$GLOBALS['data']->UserID;
+            
+            $valid  = array("UserID");
+
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             
@@ -722,7 +725,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
               }
 
           } else{
-            failure("Please specify a userID.");
+            failure("Please specify a UserID.");
           }
             
         }
@@ -731,6 +734,12 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
           if (isset($GLOBALS['data']->return)){
             //var_dump("Bruh");
             $sql = "SELECT wr.Wine_ID, wr.UserID, wr.Rating, wr.Comment ,w.Name, w.Vintage, w.Producer, w.Category, w.Cultivars, w.Description, w.Cost_per_bottle FROM wine_reviews as wr INNER JOIN wine as w ON w.WineID=wr.Wine_ID" ;
+            $valid  = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Business_ID','Wine_ID','Name','Rating');
+            
+            if (isset($GLOBALS['data']->search)){
+              $sql = "SELECT wr.Wine_ID, wr.UserID, wr.Rating, wr.Comment ,w.Name, w.Vintage, w.Producer, w.Category, w.Cultivars, w.Description, w.Cost_per_bottle FROM wine_reviews as wr INNER JOIN wine as w ON w.WineID=wr.Wine_ID WHERE ".search($valid) ;
+            } 
+
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             
