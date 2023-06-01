@@ -65,52 +65,60 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
               data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px">
-              Filter
+              Sort
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <a class="dropdown-item" href="#" onclick="updateFilter('Option 1')">Option 1</a>
+                <a class="dropdown-item" href="#" onclick="updateSort('Alcohol-asc')">Alcohol-asc</a>
               </li>
               <li>
-                <a class="dropdown-item" href="#" onclick="updateFilter('Option 2')">Option 2</a>
+                <a class="dropdown-item" href="#" onclick="updateSort('Alcohol-desc')">Alcohol-desc</a>
               </li>
               <li>
-                <a class="dropdown-item" href="#" onclick="updateFilter('Option 3')">Option 3</a>
+                <a class="dropdown-item" href="#" onclick="updateSort('Acidity-asc')">Acidity-asc</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#" onclick="updateSort('Acidity-desc')">Acidity-desc</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#" onclick="updateSort('Cost_per_bottle-asc')">Cost_per_bottle-asc</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#" onclick="updateSort('Cost_per_bottle-desc')">Cost_per_bottle-desc</a>
               </li>
             </ul>
           </li>
-          <li class="nav-item dropdown">
+          <!-- <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button"
               data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px">
-              Sort
+              Order
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
               <li>
-                <a class="dropdown-item" href="#" onclick="updateSort('Option 1')">Option 1</a>
+                <a class="dropdown-item" href="#" onclick="updateSort('Option 1')">Ascending</a>
               </li>
               <li>
-                <a class="dropdown-item" href="#" onclick="updateSort('Option 2')">Option 2</a>
+                <a class="dropdown-item" href="#" onclick="updateSort('Option 2')">Descending</a>
               </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="updateSort('Option 3')">Option 3</a>
-              </li>
+              
             </ul>
-          </li>
+          </li> -->
         </ul>
+        <button class="FilterButton btn btn-primary " id="applyFilterButton" style="background-color: #00192b;">Apply</button>
       </div>
     </div>
   </nav>
 
   <script>
-    function updateFilter(text) {
+    function updateSort(text) {
       document.getElementById("navbarDropdownMenuLink").textContent =
-        "Filtering: " + text;
+        "Sort: " + text;
     }
 
-    function updateSort(text) {
+    /* function updateSort(text) {
       document.getElementById("navbarDropdownMenuLink2").textContent =
         "Sorting: " + text;
-    }
+    } */
   </script>
 
   <section class="p-5" style="background-color: #00192b; color: white">
