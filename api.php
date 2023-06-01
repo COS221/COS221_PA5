@@ -321,7 +321,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             $table = "wine";
             $sql = "SELECT * from wine";  //redundant
 
-            $valid  = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Business_ID','Name');
+            $valid  = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','WineID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Business_ID','Name');
 
             if (search($valid ) == false) {
               # code...
@@ -402,7 +402,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
 
             $possibleSelect = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Name');
 
-            $valid  = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Business_ID','Name');
+            $valid  = array('Body','Alcohol','WineID','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Business_ID','Name');
 
             if (search($valid ) == false) {
               # code...
@@ -742,7 +742,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                   //var_dump($row);  //to use later for testing queries
                     # code...
                     $post_item = array(
-                        'WineID' => $row['WineID'],
+                        'Wine_ID' => $row['Wine_ID'],
                         'UserID' => $row['UserID'],
                         'Rating' => $row['Rating'],
                         'Comment' => $row['Comment'],
