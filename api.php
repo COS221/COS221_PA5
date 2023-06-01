@@ -737,7 +737,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             $valid  = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Business_ID','Wine_ID','Name','Rating');
             
             if (isset($GLOBALS['data']->search)){
-              $sql = "SELECT wr.Wine_ID, wr.UserID, wr.Rating, wr.Comment ,w.Name, w.Vintage, w.Producer, w.Category, w.Cultivars, w.Description, w.Cost_per_bottle FROM wine_reviews as wr INNER JOIN wine as w ON w.WineID=wr.Wine_ID WHERE ".search($valid) ;
+              $sql = "SELECT u.First_name,u.Middle_name,u.Last_name,wr.Wine_ID, wr.UserID, wr.Rating, wr.Comment ,w.Name, w.Vintage, w.Producer, w.Category, w.Cultivars, w.Description, w.Cost_per_bottle FROM user as u ,wine_reviews as wr INNER JOIN wine as w ON w.WineID=wr.Wine_ID WHERE ".search($valid) ;
             } 
 
             $stmt = $conn->prepare($sql);
@@ -762,6 +762,9 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                         'Cultivars' => $row['Cultivars'],
                         'Description' => $row['Description'],
                         'Cost_per_bottle' => $row['Cost_per_bottle'],
+                        'First_name' => $row['First_name'],
+                        'Middle_name' => $row['Middle_name'],
+                        'Last_name' => $row['Last_name']
                     );
 
                     array_push($post_arr, $post_item);
@@ -777,7 +780,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             failure("Error: please specify a return value (*_*)"); 
           }
             
-        }       
+        }          
 
     
         else if($GLOBALS['data']->type == "updateUserInfo"){
