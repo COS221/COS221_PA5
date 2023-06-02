@@ -233,7 +233,7 @@ function updateInfo() {
       // Send the request to update the data in the database
       var apiUrl = 'http://localhost/Pa05_api/api.php';
       var request = new XMLHttpRequest();
-      console.log("Here>>>>>>>>>>");
+      
        request.onreadystatechange = function() {
         if (request.readyState == 4 && request.status == 200) {
           // Handle the response from the server
