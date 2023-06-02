@@ -6,6 +6,12 @@ function getData(){
         "businessName": "Middelvlei Wine Estate" // change for each user
     };
 
+    const requestBody_2 = {
+      "type": "getBusinessInfo",
+      "api_key": "123456", // change for each user
+      "businessName": "Middelvlei Wine Estate" // change for each user
+  };
+
     var businessNameInput = document.querySelector('#businessName');
     var businessDescriptionTextarea = document.querySelector('#businessDescription');
     var websiteURLInput = document.querySelector('#websiteURL');
@@ -42,8 +48,15 @@ function getData(){
             weekdayOpenTimeInput.value = values.Weekday_open_time;
             weekendCloseTimeInput.value = values.Weekend_close_time;
             weekdayCloseTimeInput.value = values.Weekday_close_time;
-            
-            
+            /*const req_2 = new XMLHttpRequest();
+
+            req_2.onreadystatechange = function() {
+                if (req_2.readyState == 4 && req_2.status == 200) {
+                    var contact = JSON.parse(req_2.responseText).data;
+                }
+            };
+            req_2.open('POST', apiUrl, true);
+            req_2.send(JSON.stringify(requestBody_2));  for contact information*/
         }   
     };
 
@@ -229,6 +242,14 @@ function updateInfo() {
         "Facebook": "https://www.facebook.com/pages/Middelvlei%20Wine%20Estate/144921322570331/",
         "Description": businessDescription
       };
+
+      var requestBody_2 = {
+        "type":"updateBusinessRegion",
+        "api_key": "123456", //change for users
+        "BusinessID": 1,  // change for users
+        "Country": country,
+        "RegionName": region
+      };
       
       // Send the request to update the data in the database
       var apiUrl = 'http://localhost/Pa05_api/api.php';
@@ -242,8 +263,26 @@ function updateInfo() {
           
           // Check if the update was successful
           if (response.status === 'success') {
-            alert('Information has been successfully updated');
-            location.reload();
+
+            var request_2 = new XMLHttpRequest();
+            
+            request_2.onreadystatechange = function() {
+              if (request_2.readyState == 4 && request_2.status == 200) {
+                
+                var res = JSON.parse(request_2.responseText);
+                if (res.status === 'success') {
+                  
+                  alert('Information has been successfully updated');
+                  location.reload();
+                }
+                else{
+                  alert('Failed to update information');
+                  
+                }
+              }
+            };
+            request_2.open('POST', apiUrl, true);
+            request_2.send(JSON.stringify(requestBody_2));
           } else {
             alert('Failed to update information');
           }
