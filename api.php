@@ -997,18 +997,20 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
 
         else if($GLOBALS['data']->type == "getBusinessInfo"){
             
+            if($GLOBALS['data']->type)
+
             //get businessID
-            $sql = "SELECT Business_ID, Region_ID FROM business WHERE BName= '{$GLOBALS['data']->businessName}';";
+            $sql = "SELECT Region_ID FROM business WHERE Business_ID= {$GLOBALS['data']->businessID};";
             $stmt = $GLOBALS['conn']->prepare($sql); 
             $stmt->execute();
             
             if($stmt->rowCount() == 0)
                 failure("no business with {$GLOBALS['data']->businessName} in DB");
 
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);        
 
             if($stmt->rowCount() > 0) {
-                $businessID =$result['Business_ID'];
+                $businessID =$GLOBALS['data']->businessID;
                 $regionID =$result['Region_ID'];
                 
                 //get Buisiness numbers
@@ -1022,7 +1024,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                     array_push($numbers, $row['BNumber']);
                 }
                 
-                //get Buisiness numbers
+                //get Buisiness emails
                 $sql = "SELECT BEmail FROM bemail WHERE BusinessID= {$businessID};";
                 $stmt = $GLOBALS['conn']->prepare($sql); 
                 $stmt->execute();
@@ -1165,6 +1167,135 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             }
         }
         
+        else if($GLOBALS['data']->type == "getBusinessEvents"){
+            
+            //get business Events
+            $sql = "SELECT * FROM event WHERE BusinessID= {$GLOBALS['data']->businessID};";  
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0) {
+                $post_arr = array();
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $post_item = array(
+                    'EventID' => $row['EventID'],
+                    'Description' => $row['Description'],
+                    'Name' => $row['Name']
+                    );
+                    array_push($post_arr, $post_item);
+                }
+                success($post_arr);
+            }else{
+                failure("No events associated with business {$GLOBALS['data']->businessName} in DB");
+            }
+
+        }
+
+        else if($GLOBALS['data']->type == "addBuisinessEvent"){
+            $sql = "INSERT INTO event (`BusinessID`, `Description` ,`Name`)
+                    VALUES ( {$GLOBALS['data']->businessID},
+                    '{$GLOBALS['data']->Description}',
+                    '{$GLOBALS['data']->Name}' );";
+            
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+
+            if($stmt->errorCode() != '00000')
+                failure("no Business with id {$GLOBALS['data']->BusinessID} in DB");
+            else
+                success(array("status"=>"success"));
+
+        }
+
+        else if($GLOBALS['data']->type == "updateBuisinessEvent"){
+
+            $sql = "UPDATE event SET 
+                BusinessID= {$GLOBALS['data']->BusinessID},
+                Description= '{$GLOBALS['data']->Description}', 
+                Name= '{$GLOBALS['data']->Name}' 
+                WHERE EventID= {$GLOBALS['data']->EventID};";
+
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+            if($stmt->errorCode() != '00000')
+                failure("no event with id {$GLOBALS['data']->EventID} in DB");
+            else
+                success(array("status"=>"success"));
+
+        }
+        
+        else if($GLOBALS['data']->type == "removeBuisinessEvent"){
+            $sql ="DELETE FROM event WHERE EventID= {$GLOBALS['data']->EventID};";
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+            
+            if($stmt->errorCode() != '00000')
+                failure("no event with id {$GLOBALS['data']->EventID} in DB");
+            else
+                success(array("status"=>"success"));
+        }
+
+        else if($GLOBALS['data']->type == "getBusinessNumbers"){
+            //get Buisiness numbers
+            $sql = "SELECT * FROM bnumber WHERE BusinessID= {$GLOBALS['data']->businessID};";
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+
+            $numbers = array();
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                extract($row);
+                array_push($numbers, array('BusinessID' => $row['BusinessID'],'BNumber' => $row['BNumber']));
+            }
+
+            success($numbers);
+        }
+
+        else if($GLOBALS['data']->type == "getBusinessEmails"){
+            //get Buisiness numbers
+            $sql = "SELECT * FROM bemail WHERE BusinessID= {$GLOBALS['data']->businessID};";
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+
+            $numbers = array();
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                extract($row);
+                array_push($numbers, array('BusinessID' => $row['BusinessID'],'BEmail' => $row['BEmail']));
+            }
+
+            success($numbers);
+        }
+
+        else if($GLOBALS['data']->type == "updateBuisinessNumber"){
+            
+            $sql = "UPDATE bnumber SET 
+            BNumber= '{$GLOBALS['data']->newNumber}'
+            WHERE BusinessID= {$GLOBALS['data']->businessID} && BNumber= '{$GLOBALS['data']->currentNumber}';";
+
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+            if($stmt->errorCode() != '00000')
+                failure("no number {$GLOBALS['data']->currentNumber} for business with id {$GLOBALS['data']->businessID} in DB");
+            else
+                success(array("status"=>"success"));
+
+        }
+
+        else if($GLOBALS['data']->type == "updateBuisinessEmail"){
+            
+            $sql = "UPDATE bemail SET 
+            BEmail= '{$GLOBALS['data']->newEmail}'
+            WHERE BusinessID= {$GLOBALS['data']->businessID} && BEmail= '{$GLOBALS['data']->currentEmail}';";
+
+            $stmt = $GLOBALS['conn']->prepare($sql); 
+            $stmt->execute();
+            if($stmt->errorCode() != '00000')
+                failure("no email {$GLOBALS['data']->currentEmail} for business with id {$GLOBALS['data']->businessID} in DB");
+            else
+                success(array("status"=>"success"));
+
+        }
+
         else{
             failure("Error: Invalid Type parameter, please check spelling or ask the API team for assistance");
         }
