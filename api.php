@@ -737,7 +737,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             $valid  = array('Body','Alcohol','Tannin','Acidity','Sweetness','Producer','Vintage','Business_ID','Wine_URL' ,'Volume','Cultivars','Category','Cost_per_bottle','Cost_per_glass','Price_Category','Business_ID','Wine_ID','Name','Rating');
             
             if (isset($GLOBALS['data']->search)){
-              $sql = "SELECT u.First_name,u.Middle_name,u.Last_name,wr.Wine_ID, wr.UserID, wr.Rating, wr.Comment ,w.Name, w.Vintage, w.Producer, w.Category, w.Cultivars, w.Description, w.Cost_per_bottle FROM user as u ,wine_reviews as wr INNER JOIN wine as w ON w.WineID=wr.Wine_ID WHERE ".search($valid) ;
+              $sql = "SELECT u.First_name,u.Middle_name,u.Last_name,wr.Wine_ID, wr.UserID, wr.Rating, wr.Comment ,w.Name, w.Vintage, w.Producer, w.Category, w.Cultivars, w.Description, w.Cost_per_bottle FROM user as u ,wine_reviews as wr INNER JOIN wine as w ON w.WineID=wr.Wine_ID WHERE u.UserID =wr.UserID AND ".search($valid) ;
             } 
 
             $stmt = $conn->prepare($sql);
