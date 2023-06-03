@@ -160,10 +160,7 @@ function Fuzzysearch($possible){
         # code...
         if ( isset($GLOBALS['data']->search->$column) ) {
             # code...
-            $fuzz =substr($GLOBALS['data']->search->$column,0,2)."%";
-            $select[] = $column . ' LIKE "' . $fuzz.'"' ;
-            // echo "Added to where statement";
-            //var_dump($select);
+            $select[] = $column . ' LIKE "%' . $GLOBALS['data']->search->$column.'%"' ;
         }
     }
   return implode(' AND ', $select);
