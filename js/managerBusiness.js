@@ -1,16 +1,11 @@
-function getData(){ 
-    const apiUrl = 'http://localhost/Pa05_api/api.php';
-    const requestBody = {
-        "type": "getBusinessInfo",
-        "api_key": "123456", // change for each user
-        "businessName": "Middelvlei Wine Estate" // change for each user
-    };
-
-    const requestBody_2 = {
+function getData() {
+  const apiUrl = 'http://localhost/Pa05_api/api.php';
+  const requestBody = {
       "type": "getBusinessInfo",
       "api_key": "123456", // change for each user
-      "businessName": "Middelvlei Wine Estate" // change for each user
+      "businessName": "Middelvlei Wine Estate" // use the businessName parameter
   };
+
 
     var businessNameInput = document.querySelector('#businessName');
     var businessDescriptionTextarea = document.querySelector('#businessDescription');
@@ -41,8 +36,8 @@ function getData(){
             businessNameInput.value = values.BName;
             businessDescriptionTextarea.value = values.Description;
             websiteURLInput.value = values.Website_URL;
-            /*contactPhoneInput.placeholder = values.contactPhone;
-            contactEmailInput.placeholder = values.contactEmail;*/
+            contactPhoneInput.value = values.Numbers[0];
+            contactEmailInput.value = values.Emails[0];
             instagram.value = values.Instagram;
             facebook.value = values.Facebook;
             twitter.value = values.Twitter;
@@ -54,15 +49,7 @@ function getData(){
             weekdayOpenTimeInput.value = values.Weekday_open_time;
             weekendCloseTimeInput.value = values.Weekend_close_time;
             weekdayCloseTimeInput.value = values.Weekday_close_time;
-            /*const req_2 = new XMLHttpRequest();
-
-            req_2.onreadystatechange = function() {
-                if (req_2.readyState == 4 && req_2.status == 200) {
-                    var contact = JSON.parse(req_2.responseText).data;
-                }
-            };
-            req_2.open('POST', apiUrl, true);
-            req_2.send(JSON.stringify(requestBody_2));  for contact information*/
+            
         }   
     };
 
@@ -225,7 +212,7 @@ function updateInfo() {
     var weekdayCloseTimeInput = document.querySelector('#weekdayCloseTime');
 
     
-      var businessName = businessNameInput.value;
+      var businessName = "Middelvlei Wine Estate";
       var businessDescription = businessDescriptionTextarea.value;
       var websiteURL = websiteURLInput.value;
       var contactPhone = contactPhoneInput.value;
@@ -291,6 +278,7 @@ function updateInfo() {
                 if (res.status === 'success') {
                   
                   alert('Information has been successfully updated');
+                  
                   location.reload();
                 }
                 else{
