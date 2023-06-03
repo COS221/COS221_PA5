@@ -17,6 +17,9 @@ function getData(){
     var websiteURLInput = document.querySelector('#websiteURL');
     var contactPhoneInput = document.querySelector('#contactPhone');
     var contactEmailInput = document.querySelector('#contactEmail');
+    var instagram = document.querySelector('#instagram');
+    var facebook = document.querySelector('#facebook');
+    var twitter = document.querySelector('#twitter');
     var countryInput = document.querySelector('#country');
     var regionInput = document.querySelector('#region');
     var longitudeInput = document.querySelector('#longitude');
@@ -40,6 +43,9 @@ function getData(){
             websiteURLInput.value = values.Website_URL;
             /*contactPhoneInput.placeholder = values.contactPhone;
             contactEmailInput.placeholder = values.contactEmail;*/
+            instagram.value = values.Instagram;
+            facebook.value = values.Facebook;
+            twitter.value = values.Twitter;
             countryInput.value = values.Country;
             regionInput.value = values.RegionName;
             longitudeInput.value = values.Longitude;
@@ -81,6 +87,9 @@ function createForm() {
     var websiteURLDiv = createFormInput('URL for website', 'websiteURL', 'text');
     var contactPhoneDiv = createFormInput('Contact Phone', 'contactPhone', 'text');
     var contactEmailDiv = createFormInput('Contact Email', 'contactEmail', 'email');
+    var instagram = createFormInput('Instagram', 'instagram', 'text');
+    var Facebook = createFormInput('Facebook', 'facebook', 'text');
+    var Twitter = createFormInput('Twitter', 'twitter', 'text');
     var countryDiv = createFormInput('Country', 'country', 'text');
     var regionDiv = createFormInput('Region Name', 'region', 'text');
     var longitudeDiv = createFormInput('Longitude', 'longitude', 'text');
@@ -127,6 +136,9 @@ function createForm() {
     form.appendChild(websiteURLDiv);
     form.appendChild(contactPhoneDiv);
     form.appendChild(contactEmailDiv);
+    form.appendChild(Twitter);
+    form.appendChild(Facebook);
+    form.appendChild(instagram);
     form.appendChild(countryDiv);
     form.appendChild(regionDiv);
     form.appendChild(longitudeDiv);
@@ -195,11 +207,14 @@ function updateInfo() {
     
       // Collect the data from the form inputs
 
-      var businessNameInput = document.querySelector('#businessName');
+    var businessNameInput = document.querySelector('#businessName');
     var businessDescriptionTextarea = document.querySelector('#businessDescription');
     var websiteURLInput = document.querySelector('#websiteURL');
     var contactPhoneInput = document.querySelector('#contactPhone');
     var contactEmailInput = document.querySelector('#contactEmail');
+    var instagram = document.querySelector('#instagram');
+    var facebook = document.querySelector('#facebook');
+    var twitter = document.querySelector('#twitter');
     var countryInput = document.querySelector('#country');
     var regionInput = document.querySelector('#region');
     var longitudeInput = document.querySelector('#longitude');
@@ -215,6 +230,9 @@ function updateInfo() {
       var websiteURL = websiteURLInput.value;
       var contactPhone = contactPhoneInput.value;
       var contactEmail = contactEmailInput.value;
+      var instagram = instagram.value;
+      var facebook = facebook.value;
+      var twitter = twitter.value;
       var country = countryInput.value;
       var region = regionInput.value;
       var longitude = longitudeInput.value;
@@ -237,9 +255,9 @@ function updateInfo() {
         "Weekday_close_time": weekdayCloseTime,
         "Weekend_open_time": weekendOpenTime,
         "Weekend_close_time": weekendCloseTime,
-        "Instagram": "https://www.instagram.com/middelvlei_wine/",
-        "Twitter": "https://twitter.com/Middelvlei_Wine",
-        "Facebook": "https://www.facebook.com/pages/Middelvlei%20Wine%20Estate/144921322570331/",
+        "Instagram": instagram,
+        "Twitter": twitter,
+        "Facebook": facebook,
         "Description": businessDescription
       };
 
