@@ -58,16 +58,67 @@
     </div>
   </nav>
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px">
+              Category
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
+              <li>
+                <a class="dropdown-item" href="#" onclick="updateCategoryFilter('White')">White</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#" onclick="updateCategoryFilter('Red')">Red</a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink4" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px">
+              Sweetness
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink4">
+              <li>
+                <a class="dropdown-item" href="#" onclick="updateSweetnessFilter('High')">High</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#" onclick="updateSweetnessFilter('Medium')">Medium</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#" onclick="updateSweetnessFilter('Low')">Low</a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink3" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px">
+              Price Category
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink3">
+              <li>
+                <a class="dropdown-item" href="#" onclick="updatePriceFilter('Premium')">Premium</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#" onclick="updatePriceFilter('Super Premium')">Super Premium</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#" onclick="updatePriceFilter('Luxury')">Luxury</a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button"
               data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px">
               Sort
             </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
               <li>
                 <a class="dropdown-item" href="#" onclick="updateSort('Alcohol-asc')">Alcohol-asc</a>
               </li>
@@ -88,37 +139,61 @@
               </li>
             </ul>
           </li>
-          <!-- <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px">
-              Order
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
-              <li>
-                <a class="dropdown-item" href="#" onclick="updateSort('Option 1')">Ascending</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" onclick="updateSort('Option 2')">Descending</a>
-              </li>
-              
-            </ul>
-          </li> -->
+          
         </ul>
-        <button class="FilterButton btn btn-primary " id="applyFilterButton" style="background-color: #00192b;">Apply</button>
+       
       </div>
     </div>
   </nav>
 
   <script>
     function updateSort(text) {
-      document.getElementById("navbarDropdownMenuLink").textContent =
-        "Sort: " + text;
+      document.getElementById("navbarDropdownMenuLink1").textContent = "Sort: " + text;
+      sortData(text);
+
+      //clear other fields
+      document.getElementById("navbarDropdownMenuLink2").textContent = "Category";
+      document.getElementById("navbarDropdownMenuLink3").textContent = "Price Category";
+      document.getElementById("navbarDropdownMenuLink4").textContent = "Sweetness";
     }
 
-    /* function updateSort(text) {
-      document.getElementById("navbarDropdownMenuLink2").textContent =
-        "Sorting: " + text;
-    } */
+    function updateCategoryFilter(text){
+
+      var newText="Category: " + text;
+      document.getElementById("navbarDropdownMenuLink2").textContent = newText;
+      filterData(newText);
+
+      //clear other fields
+      document.getElementById("navbarDropdownMenuLink1").textContent = "Sort";
+      document.getElementById("navbarDropdownMenuLink3").textContent = "Price Category";
+      document.getElementById("navbarDropdownMenuLink4").textContent = "Sweetness";
+   
+    }
+
+    function updatePriceFilter(text){
+      var newText="Price Category: " + text;
+      document.getElementById("navbarDropdownMenuLink3").textContent = newText;
+      filterData(newText);
+
+      //clear other fields
+      document.getElementById("navbarDropdownMenuLink1").textContent = "Sort";
+      document.getElementById("navbarDropdownMenuLink2").textContent = "Category";
+      document.getElementById("navbarDropdownMenuLink4").textContent = "Sweetness";
+      
+    }
+
+    function updateSweetnessFilter(text){
+      var newText="Sweetness: " + text;
+      document.getElementById("navbarDropdownMenuLink4").textContent = newText;
+      filterData(newText);
+
+      //clear other fields
+      document.getElementById("navbarDropdownMenuLink1").textContent = "Sort";
+      document.getElementById("navbarDropdownMenuLink3").textContent = "Price Category";
+      document.getElementById("navbarDropdownMenuLink2").textContent = "Category";
+ 
+    }
+
   </script>
 
   <section class="p-5" style="background-color: #00192b; color: white">
