@@ -638,7 +638,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
         
         else if ($GLOBALS['data']->type == "RateWine"){
 
-          $sql = "Select * from wine_reviews WHERE UserID= '".$GLOBALS['data']->userID."' AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
+          $sql = "Select * from wine_reviews WHERE UserID= ".$GLOBALS['data']->userID." AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
           $stmt = $GLOBALS['conn']->prepare($sql); 
           $stmt->execute();
       
@@ -646,14 +646,14 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
       
             if ($count == 0) {
                 # code...
-                $sql = "INSERT INTO wine_reviews VALUES ('".$GLOBALS['data']->rate->Wine_ID."', ".$GLOBALS['data']->userID.", ".$GLOBALS['data']->rate->rating.", ".$GLOBALS['data']->rate->comment.")";
+                $sql = "INSERT INTO wine_reviews VALUES (".$GLOBALS['data']->rate->Wine_ID.", ".$GLOBALS['data']->userID.", ".$GLOBALS['data']->rate->rating.", '".$GLOBALS['data']->rate->comment."')";
               // var_dump($sql);
       
                 $stmt = $GLOBALS['conn']->prepare($sql);
                 $stmt->execute();
             } 
             else {
-                $sql = "UPDATE wine_reviews SET Rating= ".$GLOBALS['data']->rate->rating.", SET Comment= ".$GLOBALS['data']->rate->comment." WHERE userID='".$GLOBALS['data']->userID."' AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
+                $sql = "UPDATE wine_reviews SET Rating= ".$GLOBALS['data']->rate->rating.", Comment= '".$GLOBALS['data']->rate->comment."' WHERE UserID=".$GLOBALS['data']->userID." AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
       
                 $stmt = $GLOBALS['conn']->prepare($sql);
                 $stmt->execute();
@@ -661,7 +661,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
         }
         
         else if ($GLOBALS['data']->type == "RateWinery"){
-          $sql = "Select * from business_reviews WHERE UserID= '".$GLOBALS['data']->userID."' AND Business_ID = ".$GLOBALS['data']->rate->Business_ID;
+          $sql = "Select * from business_reviews WHERE UserID= ".$GLOBALS['data']->userID." AND Business_ID = ".$GLOBALS['data']->rate->Business_ID;
           $stmt = $GLOBALS['conn']->prepare($sql); 
           $stmt->execute();
       
@@ -669,14 +669,14 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
       
             if ($count == 0) {
                 # code...
-                $sql = "INSERT INTO business_reviews VALUES ('".$GLOBALS['data']->rate->Business_ID."', ".$GLOBALS['data']->userID.", ".$GLOBALS['data']->rate->rating.", ".$GLOBALS['data']->rate->comment.")";
+                $sql = "INSERT INTO business_reviews VALUES (".$GLOBALS['data']->rate->Business_ID."," .$GLOBALS['data']->userID.", ".$GLOBALS['data']->rate->rating.", '".$GLOBALS['data']->rate->comment."')";
               // var_dump($sql);
       
                 $stmt = $GLOBALS['conn']->prepare($sql);
                 $stmt->execute();
             } 
             else {
-                $sql = "UPDATE business_reviews SET Rating= ".$GLOBALS['data']->rate->rating.", SET Comment= ".$GLOBALS['data']->rate->comment." WHERE userID='".$GLOBALS['data']->userID."' AND Business_ID = ".$GLOBALS['data']->rate->Business_ID;
+                $sql = "UPDATE business_reviews SET Rating= ".$GLOBALS['data']->rate->rating.", SET Comment= '".$GLOBALS['data']->rate->comment."' WHERE userID=".$GLOBALS['data']->userID." AND Business_ID = ".$GLOBALS['data']->rate->Business_ID;
       
                 $stmt = $GLOBALS['conn']->prepare($sql);
                 $stmt->execute();
