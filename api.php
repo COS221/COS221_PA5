@@ -270,33 +270,6 @@ function limit(){
   
 }
 
-//Creating and update functions may be added here
-
-
-// function rateWine(){ //userID must be specified
-
-//     $sql = "Select * from wine_reviews WHERE UserID= '".$GLOBALS['data']->userID."' AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
-//     $stmt = $GLOBALS['conn']->prepare($sql); 
-//     $stmt->execute();
-
-//     $count = $stmt->rowCount();
-
-//       if ($count == 0) {
-//           # code...
-//           $sql = "INSERT INTO wine_reviews VALUES ('".$GLOBALS['data']->rate->Wine_ID."', ".$GLOBALS['data']->userID.", ".$GLOBALS['data']->rate->rating.", ".$GLOBALS['data']->rate->comment.")";
-//         // var_dump($sql);
-
-//           $stmt = $GLOBALS['conn']->prepare($sql);
-//           $stmt->execute();
-//       } 
-//       else {
-//           $sql = "UPDATE wine_reviews SET Rating= ".$GLOBALS['data']->rate->rating.", SET Comment= ".$GLOBALS['data']->rate->comment." WHERE userID='".$GLOBALS['data']->userID."' AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
-
-//           $stmt = $GLOBALS['conn']->prepare($sql);
-//           $stmt->execute();
-//       }
-// }
-
 
 //A default user who isnt logged in will use the apikey 123456
 if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key == $apikey ) {   //validate APIkey
@@ -651,12 +624,15 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
       
                 $stmt = $GLOBALS['conn']->prepare($sql);
                 $stmt->execute();
+                success("Your review has been succesfully saved");
             } 
             else {
                 $sql = "UPDATE wine_reviews SET Rating= ".$GLOBALS['data']->rate->rating.", Comment= '".$GLOBALS['data']->rate->comment."' WHERE UserID=".$GLOBALS['data']->userID." AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
       
                 $stmt = $GLOBALS['conn']->prepare($sql);
                 $stmt->execute();
+
+                success("Your review has been succesfully updated");
             }
         }
         
@@ -674,14 +650,104 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
       
                 $stmt = $GLOBALS['conn']->prepare($sql);
                 $stmt->execute();
+                success("Your review has been succesfully saved");
             } 
             else {
                 $sql = "UPDATE business_reviews SET Rating= ".$GLOBALS['data']->rate->rating.", SET Comment= '".$GLOBALS['data']->rate->comment."' WHERE userID=".$GLOBALS['data']->userID." AND Business_ID = ".$GLOBALS['data']->rate->Business_ID;
       
                 $stmt = $GLOBALS['conn']->prepare($sql);
                 $stmt->execute();
+                success("Your review has been succesfully updated");
             }
             
+        }
+
+        else if ($GLOBALS['data']->type == "RemoveFavouriteWinery"){
+
+          $sql = "Select * from favourite_business WHERE UserID= ".$GLOBALS['data']->UserID." AND BusinessID = ".$GLOBALS['data']->BusinessID;
+          $stmt = $GLOBALS['conn']->prepare($sql); 
+          $stmt->execute();
+      
+          $count = $stmt->rowCount();
+      
+            if ($count == 0) {
+                success("The winery was already not the user's favourite");
+            } 
+            else {
+              $sql = "DELETE FROM favourite_business WHERE UserID=".$GLOBALS['data']->UserID." AND BusinessID = ".$GLOBALS['data']->BusinessID;
+                //$sql = "UPDATE favourite_business dro SET Rating= ".$GLOBALS['data']->rate->rating.", Comment= '".$GLOBALS['data']->rate->comment."' WHERE UserID=".$GLOBALS['data']->userID." AND Wine_ID = ".$GLOBALS['data']->rate->Wine_ID;
+      
+                $stmt = $GLOBALS['conn']->prepare($sql);
+                $stmt->execute();
+                success("Your favourite has been succesfully removed");
+            }
+        
+        }
+
+        else if ($GLOBALS['data']->type == "AddFavouriteWinery"){
+
+          $sql = "Select * from favourite_business WHERE UserID= ".$GLOBALS['data']->UserID." AND WineID = ".$GLOBALS['data']->BusinessID;
+          $stmt = $GLOBALS['conn']->prepare($sql); 
+          $stmt->execute();
+      
+          $count = $stmt->rowCount();
+      
+            if ($count == 0) {
+                # code...
+                $sql = "INSERT INTO favourite_business VALUES (".$GLOBALS['data']->UserID.", ".$GLOBALS['data']->BusinessID.") ";
+              // var_dump($sql);
+      
+                $stmt = $GLOBALS['conn']->prepare($sql);
+                $stmt->execute();
+                success("Your favourite has been succesfully saved.");
+            } 
+            else {
+                success("The user has already favourited this winery.");
+            }
+        
+        }
+
+        else if ($GLOBALS['data']->type == "RemoveFavouriteWine"){
+
+          $sql = "Select * from favourite_wine WHERE UserID= ".$GLOBALS['data']->UserID." AND WineID = ".$GLOBALS['data']->WineID;
+          $stmt = $GLOBALS['conn']->prepare($sql); 
+          $stmt->execute();
+      
+          $count = $stmt->rowCount();
+      
+            if ($count == 0) {
+                success("The wine was already not the user's favourite");
+            } 
+            else {
+                $sql = "DELETE FROM favourite_wine WHERE UserID=".$GLOBALS['data']->UserID." AND WineID = ".$GLOBALS['data']->WineID;
+                $stmt = $GLOBALS['conn']->prepare($sql);
+                $stmt->execute();
+                success("Your favourite has been succesfully removed");
+            }
+        
+        }
+
+        else if ($GLOBALS['data']->type == "AddFavouriteWine"){
+
+          $sql = "Select * from favourite_wine WHERE UserID= ".$GLOBALS['data']->UserID." AND WineID = ".$GLOBALS['data']->WineID;
+          $stmt = $GLOBALS['conn']->prepare($sql); 
+          $stmt->execute();
+      
+          $count = $stmt->rowCount();
+      
+            if ($count == 0) {
+                # code...
+                $sql = "INSERT INTO favourite_wine VALUES (".$GLOBALS['data']->WineID.", ".$GLOBALS['data']->UserID.") ";
+              // var_dump($sql);
+      
+                $stmt = $GLOBALS['conn']->prepare($sql);
+                $stmt->execute();
+                success("Your favourite has been succesfully saved.");
+            } 
+            else {
+                success("The user has already favourited this wine.");
+            }
+        
         }
         
         else if ($GLOBALS['data']->type == "FavouriteWine"){
@@ -736,6 +802,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             if (isset($GLOBALS['data']->search)){
               $sql = "SELECT u.First_name,u.Middle_name,u.Last_name,wr.Wine_ID, wr.UserID, wr.Rating, wr.Comment ,w.Name, w.Vintage, w.Producer, w.Category, w.Cultivars, w.Description, w.Cost_per_bottle FROM user as u ,wine_reviews as wr INNER JOIN wine as w ON w.WineID=wr.Wine_ID WHERE u.UserID =wr.UserID AND ".search($valid) ;
             } 
+            //var_dump($sql);
 
             $stmt = $conn->prepare($sql);
             $stmt->execute();
@@ -777,7 +844,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
             failure("Error: please specify a return value (*_*)"); 
           }
             
-        }          
+        }       
 
     
         else if($GLOBALS['data']->type == "updateUserInfo"){
