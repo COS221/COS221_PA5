@@ -3,7 +3,7 @@ function getData() {
   const requestBody = {
       "type": "getBusinessInfo",
       "api_key": "123456", // change for each user
-      "businessName": "Middelvlei Wine Estate" // use the businessName parameter
+      "businessID": 1 // change for each business
   };
 
 
@@ -212,7 +212,7 @@ function updateInfo() {
     var weekdayCloseTimeInput = document.querySelector('#weekdayCloseTime');
 
     
-      var businessName = "Middelvlei Wine Estate";
+      var businessName = businessNameInput.value;
       var businessDescription = businessDescriptionTextarea.value;
       var websiteURL = websiteURLInput.value;
       var contactPhone = contactPhoneInput.value;
