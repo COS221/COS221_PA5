@@ -852,18 +852,8 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
         }
 
         else if($GLOBALS['data']->type == "getAllBuisinessWines"){
-            
-            //get businessID
-            $sql = "SELECT Business_ID FROM business WHERE BName= '{$GLOBALS['data']->businessName}';";
-            $stmt = $GLOBALS['conn']->prepare($sql); 
-            $stmt->execute();
 
-            if($stmt->rowCount() == 0)
-                failure("no business with BName {$GLOBALS['data']->businessName} in DB");
-
-            //return wines
-            if( $stmt->rowCount() >0){
-                $businessID =$stmt->fetch(PDO::FETCH_ASSOC)["Business_ID"];
+                $businessID =$GLOBALS['data']->businessId;
                 
                 $sql = "SELECT * FROM wine WHERE Business_ID= '{$businessID}';";  
                 $stmt = $conn->prepare($sql);
@@ -900,7 +890,7 @@ if (isset($GLOBALS['data']->api_key) && isThere() || $GLOBALS['data']->api_key =
                 }else{
                     failure("No wine associated with business {$GLOBALS['data']->businessName} in DB");
                 }
-            }
+        
         }
 
         else if($GLOBALS['data']->type == "updateWine"){
