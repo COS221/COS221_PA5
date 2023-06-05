@@ -110,14 +110,6 @@ function createForm() {
     timesRow.appendChild(weekendTimesCol);
     timesRow.appendChild(weekdayTimesCol);
     
-    var eventsHeading = document.createElement('h4');
-    eventsHeading.className = 'heading';
-    eventsHeading.textContent = 'Events';
-    
-    var eventNameDiv = createFormInput('Event Name', 'eventName', 'text');
-    var eventsDescriptionDiv = createFormTextarea('Events Description', 'eventsDescription', 3);
-    
-    
     form.appendChild(businessNameDiv);
     form.appendChild(businessDescriptionDiv);
     form.appendChild(websiteURLDiv);
@@ -132,9 +124,6 @@ function createForm() {
     form.appendChild(latitudeDiv);
     form.appendChild(timesHeading);
     form.appendChild(timesRow);
-    form.appendChild(eventsHeading);
-    form.appendChild(eventNameDiv);
-    form.appendChild(eventsDescriptionDiv);
     
     container.appendChild(heading);
     container.appendChild(form);

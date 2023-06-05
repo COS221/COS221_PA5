@@ -11,14 +11,30 @@
       margin-bottom: 20px;
     }
     .d-flex {
-            justify-content: center;
-    }
+        justify-content: center;
+        align-items: center;
+      }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        margin-right: 1rem;
+      }
+
+      .logo img {
+        height: 100px; /* Adjust the height as needed */
+        margin-right: 0.5rem;
+      }
+      
   </style>
   <script src="js/usersettings.js"></script>
 </head>
 <body> 
     <!--Nav-->
     <ul class="nav nav-tabs d-flex">
+      <li class="nav-item logo">
+        <a href="index.php"><img src="img\Vineyard.svg" alt="Logo" /></a>
+      </li>
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="usersettings.html">Settings</a>
         </li>

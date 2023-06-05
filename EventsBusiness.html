@@ -13,6 +13,18 @@
     <style>
       .d-flex {
         justify-content: center;
+        align-items: center;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        margin-right: 1rem;
+      }
+
+      .logo img {
+        height: 100px; /* Adjust the height as needed */
+        margin-right: 0.5rem;
       }
     </style>
     <script src="js/managerEvents.js"></script>
@@ -21,6 +33,9 @@
   <body>
     <!--The NavBar-->
     <ul class="nav nav-tabs d-flex">
+      <li class="nav-item logo">
+        <a href="index.php"><img src="img\Vineyard.svg" alt="Logo" /></a>
+      </li>
       <li class="nav-item">
         <a class="nav-link" href="managerBusiness.html">Business</a>
       </li>
