@@ -1,0 +1,85 @@
+body::before {
+  display: block;
+  content: '';
+  height: 60px;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+.nav-link {
+  color: #00192B;
+}
+
+.displayImg{
+  height: 300px;
+  width: 300px;
+}
+
+.scrollReviews{
+  height: 300px;
+  overflow-y: scroll;
+}
+
+@keyframes goldborder {
+  0% {
+    border-color: gold;
+    box-shadow: inset 3px 0 3px gold, inset -3px 0 3px gold, inset 0 3px 3px gold, inset 0 -3px 3px gold;
+  }
+  30% {
+    border-color: white;
+    box-shadow: inset 3px 0 3px white, inset -3px 0 3px white, inset 0 3px 3px white, inset 0 -3px 3px white;
+  }
+  100% {
+    border-color: gold;
+    box-shadow: inset 3px 0 3px gold, inset -3px 0 3px gold, inset 0 3px 3px gold, inset 0 -3px 3px gold;
+  }
+}
+
+.stars .star {
+  font-size: 30px;
+  color: black;
+  transition: color 0.2s ease;
+}
+
+.stars .star:hover:before {
+  content: "\2605";
+  color: gold;
+}
+
+
+
+
+
+div#imageVineyard:hover{
+  color: #00192b;
+  background-color: #d0d7d09e;
+  background-image: url("..img/Vineyard.svg");
+  background-repeat: round;
+  border: 5px dashed #00192b;
+  /* border: 5px; */
+  /* width: 290px;} */
+}
+
+  #imageVineyard {
+         
+    position: relative;
+    overflow: hidden;
+  }
+
+  #imageVineyard img {
+    transition: transform 0.1s;
+    
+  }
+  #imageVineyard:hover  {
+    background-color: #1c0465; 
+    color: rgb(113, 46, 46);
+    
+  }
+
+  #imageVineyard:hover img {
+    background-color: #1c0465;
+    transform: scale(1.3);
+  }
