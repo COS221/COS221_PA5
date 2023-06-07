@@ -67,7 +67,9 @@ margin-right: 20px;
 
           } ?>
           <?php if (isset($_SESSION['Business_ID'])) {
-            echo '<div class= "RemoveLater"> <a class="nav-link" href="managerBusiness.php" style="color:red">BusinessSIDERMOVELATER</a></div>';
+            echo '<a href="managerBusiness.php" class="btn btn-md" type="button" style="background-color: maroon; color: white; margin-right:10px">
+             Manage Business
+             </a>';
           } ?>
           <!-- <div class= "RemoveLater"> <a class="nav-link" href="managerBusiness.php" style="color:red">BusinessSIDERMOVE LATER</a></div>
 <div class= "RemoveLater"> <a class="nav-link" href="usersettings.php" style="color:red">usersettings Remove LATER</a></div>
