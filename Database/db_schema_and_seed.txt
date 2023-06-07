@@ -1,0 +1,326 @@
+create schema wineyard_db;
+
+use wineyard_db;
+
+CREATE TABLE `region` (
+`Region_ID` int NOT NULL AUTO_INCREMENT,
+`Country` varchar(45) NOT NULL,
+`RegionName` varchar(45) NOT NULL,
+`Latitude` varchar(45),
+`Longitude` varchar(45),
+PRIMARY KEY (`Region_ID`),
+UNIQUE KEY `Region_ID_UNIQUE` (`Region_ID`)
+);
+
+CREATE TABLE `user` (
+`UserID` int NOT NULL AUTO_INCREMENT,
+`First_name` varchar(128) NOT NULL,
+`Middle_name` varchar(128) DEFAULT NULL,
+`Last_name` varchar(128) NOT NULL,
+`Region_id` int NOT NULL,
+`Password` varchar(255) NOT NULL,
+`Email` varchar(256) NOT NULL,
+`API_Key` varchar(45) NOT NULL,
+`PhoneNumber` varchar(45) NOT NULL,
+PRIMARY KEY (`UserID`,`Region_id`),
+UNIQUE KEY `UserID_UNIQUE` (`UserID`),
+CONSTRAINT `Region` FOREIGN KEY (`Region_ID`) REFERENCES `region` (`Region_ID`)
+);
+
+CREATE TABLE `business` (
+`Business_ID` int NOT NULL AUTO_INCREMENT,
+`BName` varchar(128) NOT NULL,
+`Business_URL` varchar(300) NOT NULL,
+`Website_URL` varchar(300) NOT NULL,
+`Weekday_open_time` varchar(128) NOT NULL,
+`Weekday_close_time` varchar(128) NOT NULL,
+`Weekend_open_time` varchar(128) NOT NULL,
+`Weekend_close_time` varchar(128) NOT NULL,
+`Instagram` varchar(128) DEFAULT NULL,
+`Twitter` varchar(128) DEFAULT NULL,
+`Facebook` varchar(128) DEFAULT NULL,
+`Description` longtext NOT NULL,
+`User_ID` int NOT NULL,
+`Region_ID` int NOT NULL,
+PRIMARY KEY (`Business_ID`),
+CONSTRAINT `UserConstraint` FOREIGN KEY (`User_ID`) REFERENCES `user` (`UserID`),
+CONSTRAINT `RegionConstraint` FOREIGN KEY (`Region_ID`) REFERENCES `region` (`Region_ID`)
+) ;
+
+CREATE TABLE `wine` (
+`WineID` int NOT NULL AUTO_INCREMENT,
+`Name` varchar(300) NOT NULL,
+`Wine_URL` varchar(300) NOT NULL,
+`Body` varchar(45) NOT NULL,
+`Alcohol` varchar(45) NOT NULL,
+`Tannin` varchar(45) NOT NULL,
+`Acidity` varchar(45) NOT NULL,
+`Sweetness` varchar(45) NOT NULL,
+`Producer` varchar(45) NOT NULL,
+`Vintage` varchar(45) NOT NULL,
+`Volume` varchar(45) NOT NULL,
+`Cultivars` varchar(45) NOT NULL,
+`Category` varchar(45) NOT NULL,
+`Description` longtext NOT NULL,
+`Cost_per_bottle` varchar(45) NOT NULL,
+`Cost_per_glass` varchar(45) NOT NULL,
+`Price_Category` varchar(45) NOT NULL,
+`Business_ID` int NOT NULL,
+PRIMARY KEY (`WineID`),
+UNIQUE KEY `WineID_UNIQUE` (`WineID`),
+CONSTRAINT `BusinessConstraint` FOREIGN KEY (`Business_ID`) REFERENCES `business` (`Business_ID`)
+);
+
+CREATE TABLE `bemail` (
+`BusinessID` int NOT NULL,
+`BEmail` varchar(300) NOT NULL,
+PRIMARY KEY (`BusinessID`,`BEmail`),
+CONSTRAINT `BusinessIDemail` FOREIGN KEY (`BusinessID`) REFERENCES `business` (`Business_ID`)
+);
+
+CREATE TABLE `bnumber` (
+`BusinessID` int NOT NULL,
+`BNumber` varchar(45) NOT NULL,
+PRIMARY KEY (`BusinessID`,`BNumber`),
+CONSTRAINT `BusinessIDbnum` FOREIGN KEY (`BusinessID`) REFERENCES `business` (`Business_ID`)
+);
+
+CREATE TABLE `business_reviews` (  /*not populated*/
+`Business_ID` int NOT NULL,
+`User_ID` int NOT NULL,
+`Rating` int NOT NULL,
+`Comment` longtext NOT NULL,
+PRIMARY KEY (`Business_ID`,`User_ID`),
+KEY `UserIDbr_idx` (`User_ID`),
+CONSTRAINT `BusinessIDbr` FOREIGN KEY (`Business_ID`) REFERENCES `business` (`Business_ID`),
+CONSTRAINT `UserIDbr` FOREIGN KEY (`User_ID`) REFERENCES `user` (`UserID`)
+);
+
+CREATE TABLE `event` ( 
+`BusinessID` int NOT NULL,
+`EventID` int NOT NULL,
+`Description` longtext NOT NULL,
+`Name` varchar(128) NOT NULL,
+PRIMARY KEY (`BusinessID`,`EventID`),
+CONSTRAINT `BusinessIDother` FOREIGN KEY (`BusinessID`) REFERENCES `business` (`Business_ID`)
+);
+
+CREATE TABLE `favourite_business` ( 
+`UserID` int NOT NULL,
+`BusinessID` int NOT NULL,
+PRIMARY KEY (`UserID`,`BusinessID`),
+KEY `BusinessIDFB_idx` (`BusinessID`),
+CONSTRAINT `BusinessIDFB` FOREIGN KEY (`BusinessID`) REFERENCES `business` (`Business_ID`),
+CONSTRAINT `UserIDFB` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`)
+);
+
+CREATE TABLE `favourite_wine` ( 
+`WineID` int NOT NULL,
+`UserID` int NOT NULL,
+PRIMARY KEY (`WineID`,`UserID`),
+KEY `UserID_idx` (`UserID`),
+CONSTRAINT `UserID` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`),
+CONSTRAINT `WineID` FOREIGN KEY (`WineID`) REFERENCES `wine` (`WineID`)
+);
+
+CREATE TABLE `wine_reviews` ( /*populated*/
+`Wine_ID` int NOT NULL,
+`UserID` int NOT NULL,
+`Rating` int NOT NULL,
+`Comment` mediumtext NOT NULL,
+PRIMARY KEY (`Wine_ID`,`UserID`),
+KEY `User_ID_idx` (`UserID`),
+CONSTRAINT `User` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`),
+CONSTRAINT `Wine_ID` FOREIGN KEY (`Wine_ID`) REFERENCES `wine` (`WineID`)
+);
+
+CREATE TABLE `tourist` (
+`UserID` int NOT NULL,
+PRIMARY KEY (`UserID`),
+CONSTRAINT `UserIDtourist` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`)
+);
+
+CREATE TABLE `manager` (
+`UserID` int NOT NULL,
+PRIMARY KEY (`UserID`),
+CONSTRAINT `UserIDManager` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`)
+);
+
+INSERT INTO region (`Country`,`RegionName`,`Latitude`,`Longitude`)
+VALUES 	("Italy","Tuscany","43.7711° N","11.2486° E")
+,("Italy","Piedmont","45.0522° N,","7.5154° E")
+,("Italy","Veneto","45.4415° N","12.3153° E")
+,("South Africa","Stellenbosch","-33.932106","18.860151")
+,("South Africa","Franschhoek","33.8975° S","19.1523° E")
+,("South Africa","Paarl","33.7342° S","18.9621° E");
+
+INSERT INTO user (`First_name`,`Middle_name` ,`Last_name` ,`Region_id` ,`Password`,`Email` ,`API_Key` ,`PhoneNumber`)
+VALUES ("Emily","Grace","Anderson",4,"7G83hB9e5N","emily.anderson@example.com","7G83hB9e5N","+1 555-123-4567")
+,("Jacob","Alexander","Smith",4,"X6rLk0Q1uW","jacob.smith@example.com","7G83hB9e5N","+44 20 1234 5678")
+,("Olivia","Rose","Johnson",4,"2vC5dY9a4I","olivia.johnson@example.com","7G83hB9e5N","+49 1234 567890")
+,("Ethan","James","Thompson",5,"P3mJk6N9o2","ethan.thompson@example.com","7G83hB9e5N","+61 2 1234 5678")
+,("Ava","Elizabeth","Wilson",5,"R9sUw2Z0qF","ava.wilson@example.com","7G83hB9e5N","+33 1 23 45 67 89")
+,("Liam","Michael","Davis",5,"A5iG8lO9pT","liam.davis@example.com","7G83hB9e5N","+39 02 1234 5678")
+,("Sophia","Marie","Taylor",6,"D4cN7uB0vE","sophia.taylor@example.com","7G83hB9e5N","+81 3 1234 5678")
+,("Noah","Benjamin","Robinson",6,"H2xY1mK3nI","noah.robinson@example.com","7G83hB9e5N","+55 11 1234-5678")
+,("Isabella","Grace","Martinez",6,"W8eR4yT1oL","isabella.martinez@example.com","7G83hB9e5N","+34 91 234 56 78")
+,("Benjamin","Thomas","Anderson",6,"F9nI5kG3jD","benjamin.anderson@example.com","7G83hB9e5N","+61 8 8765 4321")
+,("Elijah","Samuel","Harris",4,"5gW7dHjK9L","elijah.harris@example.com","7G83hB9e5N","+1 555-987-6543")
+,("Charlotte","Grace","Thompson",4,"R2sT4yU6vQ","charlotte.thompson@example.com","7G83hB9e5N","+44 20 8765 4321")
+,("Henry","Alexander","Davis",4,"P8bN6mJ3kX","henry.davis@example.com","7G83hB9e5N","+49 1234 5678910")
+,("Emma","Rose","Carter",5,"P8bN6mJ3kX","emma.carter@example.com","7G83hB9e5N","+61 2 3456 7890")
+,("Sebastian","Jameson","Wright",5,"A3nB6mG4pD","sebastian.wright@example.com","7G83hB9e5N","+33 1 2345 6789")
+,("Sophie","Elizabeth","Phillips",5,"S6tY8hN1wZ","sophie.phillips@example.com","7G83hB9e5N","+39 02 9876 5432")
+,("Nathan","Benjamin","Wilson",6,"D4eF9cR2vG","nathan.wilson@example.com","7G83hB9e5N","+81 3 4567 8901")
+,("Ava","Sophia","Mitchell",6,"H2uT7kL5mP","ava.mitchell@example.com","7G83hB9e5N","+55 11 7890-1234")
+,("Caleb","Michael","Anderson",6,"W9xR4yU1oT","caleb.anderson@example.com","7G83hB9e5N","+34 91 234 5678")
+,("Isabella","Grace","Roberts",6,"F7nI2kG8jD","isabella.roberts@example.com","7G83hB9e5N","+61 8 7654 3210");
+
+INSERT INTO business (`BName` ,`Business_URL` ,`Website_URL` ,`Weekday_open_time` ,`Weekday_close_time` ,`Weekend_open_time`,`Weekend_close_time` ,`Instagram` ,`Twitter` ,`Facebook` ,`Description` ,`User_ID`,`Region_ID`) 
+VALUES ("Middelvlei Wine Estate","https://middelvlei.co.za/new-website/wp-content/uploads/2020/02/cropped-middelvlei_logo_300px.png","https://middelvlei.co.za/","10:00:00","16:00:00","10:00:00","13:00:00","https://www.instagram.com/middelvlei_wine/","https://twitter.com/Middelvlei_Wine","https://www.facebook.com/pages/Middelvlei%20Wine%20Estate/144921322570331/","Middelvlei Estate, known for its hospitality and special farm atmosphere, offers a personal, unforgettable and authentic Stellenbosch Winelands experience for the whole family. By producing superb quality wines, brothers Tinnie and Ben Momberg are continuing the family's legacy of winemaking that has lasted for over 100 years.",1,4)
+,("Kleine Zalze Wine Estate","https://kleinezalze.co.za/wp-content/uploads/2021/07/KZ-LOGO-transparent-300.png","https://www.kleinezalze.co.za/","09:00:00","18:00:00","11:00:00","18:00:00",NULL,"https://twitter.com/kleine_zalze","https://www.facebook.com/kleinezalzeofficial/","Kleine Zalze’s philosophy is simple  – success begins in the vineyards. Exceptional wines are made possible by careful management of the farm’s extensive natural assets through innovative canopy management and selecting varieties and clones specifically suited to the various soils and slope",1,4)
+,("Vilafonté Wines","https://www.vilafonte.com/wp-content/uploads/2018/02/vilafonte-logo-black.png","https://www.vilafonte.com/","09:00:00","18:00:00","11:00:00","18:00:00","https://www.instagram.com/explore/tags/vilafonte/?hl=en","https://twitter.com/Vilafonte","https://m.facebook.com/profile.php?id=268500363255406","a vineyard different by design of ancient vilafontes soils low yielding small vines harvested by handind ividual berry selection unfiltered and barrel aged limited production",3,4)
+,("Mullineux & Leeu Family Wines - Franschhoek","https://mlfwines.com/mullineux/wp-content/themes/mullineux/images/logo.svg","https://mlfwines.com/mullineux/contact-us/","09:00:00","17:00:00","10:00:00","13:00:00",NULL,"https://twitter.com/mullineuxwines?lang=en","https://m.facebook.com/profile.php?id=171443899875120","after working several vintages at wineries in france, south africa and california, chris & andrea chose to settle in the swartland region of south africa, firmly believing that the granite and schist based terroirs and old vineyards of the swartland have the potential to produce truly great wine.",4,5)
+,("Franschhoek Cellar","https://franschhoekcellar.co.za/wp-content/themes/fhc/images/logo.png","https://franschhoekcellar.co.za/","09:00:00","18:00:00","09:00:00","13:00:00",NULL,"https://twitter.com/franschhoek_sa?lang=en","https://www.facebook.com/franschhoekcellar/","Franschhoek Cellar, a beautiful asset to the Franschhoek wine route, combines the charms of leisurely country life with the elegance of a world-class venue. Enjoy wine tastings paired with Belgian chocolate or handmade cheese. Dine on alfresco style lunches in our fabulous garden, or sip on an artisanal beer in our bistro & beer garden. Franschhoek Cellar has a special selection of unique event venues within the space to ensure we host your most memorable occasion.",5,5)
+,("La Bri Wine Estate","https://labri.co.za/wp-content/uploads/2022/12/la-bri-logo.png","https://labri.co.za/?v=e4dd286dc7d7","10:00:00","17:00:00","09:00:00","13:00:00",NULL,"https://twitter.com/labriwine?lang=en","https://www.facebook.com/LaBriWine/","Boasting a state-of-the-art 120 tonne boutique wine cellar and tasting room, La Bri is where you will find signature styled wines made with passion. Our formidable team aims to share their wonderful products with fellow wine lovers who will enjoy, share and cherish their efforts.",6,5);
+
+INSERT INTO wine (`Name`,`Wine_URL`,`Body`,`Alcohol`,`Tannin`,`Acidity`,`Sweetness`,`Producer`,`Vintage`, `Volume`, `Cultivars`, `Category`, `Description`, `Cost_per_bottle`, `Cost_per_glass`, `Price_Category`,`Business_ID`)
+VALUES ("Lamoreaux Landing Wine Cellars Chardonnay","https://vinepair.com/wp-content/uploads/2023/04/btb-chardonnay-2023-louis-jadot-macon-villages-internal.jpg", "full-bodied", "12.5", "high", "3.4", "Medium", "Middelvlei Wine Estate", "2017", "750 ml","Cabernet Sauvignon","white","The Finger Lakes knows how to give a lean Chardonnay some depth. The acidity in the wine is high (typical for cool-climate wines), but it is rounded out with an unctuous mouthfeel . There is a hint of tannin in the background that adds structure.","327,49","52","Premium",1)
+,("Billsboro Winery Chardonnay","https://vinepair.com/wp-content/uploads/2023/04/btb-chardonnay-2023-billsboro-winery-chardonnay-internal.jpg", "full-bodied", "12.3", "high", "3.4", "Medium", "Middelvlei Wine Estate", "2018", "750 ml","Cabernet Sauvignon","white","It’s lean. It’s deep. It’s in the in-between. There is ample acidity here in that cool-climate vibe but the depth on the palate gives that high tone a run for its money.","327,49","52","Premium",1)
+,("Blenheim Vineyards Chardonnay","https://vinepair.com/wp-content/uploads/2023/04/btb-chardonnay-2023-blenheim-vineyards-chardonnay-internal.jpg", "full-bodied", "12.2", "high", "3.4", "Medium", "Middelvlei Wine Estate", "2015", "750 ml","Cabernet Sauvignon","white","Guys, Virginia is not playing. And Blenheim isn’t either. This Chardonnay is so damn earthy with some deep honey notes winding through the fruit. The thick, palate-coating mouthfeel is lifted by wonderful acidity, allowing you to enjoy the weight and the refreshment all at once.","346,76","52","Premium",1)
+,("Boschkloof Chardonnay","https://vinepair.com/wp-content/uploads/2023/04/btb-chardonnay-2023-boschkloof-chardonnay-bottle-shot-charlotte-alsaadi-internal.jpg", "full-bodied", "12.0", "high", "3.4", "Medium", "Middelvlei Wine Estate", "2013","750 ml","Cabernet Sauvignon","white","A lot of stainless steel and a little bit of oak was the approach to this bright and lively wine with soft edges. The little bit of wood comes through in texture more than aroma and that is a win. This is a no-brainer on the casual wine front.","366,02","52","Premium",1)
+,("Weingut Franz & Christine Netzl Chardonnay","https://vinepair.com/wp-content/uploads/2023/04/btb-chardonnay-2023-weingut-franz-christine-netzl-chardonnay-internal.jpg", "full-bodied", "12.1", "high", "3.4", "Medium", "Middelvlei Wine Estate", "2016", "750 ml","Cabernet Sauvignon","white","This is not the Chardonnay you are used to. And that’s great because this grape has multiple personalities. Here, it is all blazing acidity, blooming with ripe, round, and unoaked(?) fruit. This is so a crowd-pleasing case-buy.","385,29","52","Premium",1)
+,("Wente Vineyards Riva Ranch Chardonnay","https://vinepair.com/wp-content/uploads/2023/04/btb-chardonnay-2023-wente-riva-ranch-chardonnay-2019-internal.jpg", "full-bodied", "12.5", "high", "3.4", "Medium", "Kleine Zalze Wine Estate", "2017", "750 ml","Cabernet Sauvignon","white","This wine is just scratching the surface of what the Wente family has to offer. But start here. If you’re gonna go for a wine with toasty and deep oak, this is the way to go. It’s soft and creamy with a good lift to the palate. A great wind-down wine","385,29","52","Premium",2)
+,("Lava Cap Winery Reserve Chardonnay","https://vinepair.com/wp-content/uploads/2023/04/btb-chardonnay-2023-lava-cap-chardonnay-nv-internal.jpg", "full-bodied", "12.9", "high", "3.4", "Medium", "Kleine Zalze Wine Estate", "2015", "750 ml","Cabernet Sauvignon","white","This is volcanic Chardonnay. No, it’s not hot but from the dark soils of a lava cap in El Dorado, Calif. It’s quite fruit-forward with a waft of that volcanic, saline minerality. The oak is minimal, which is nice because there are so many other things happening in this refreshing wine.","423,82","67,8112","Super Premium",2)
+,("Corey Creek Coquillage Chardonnay","https://vinepair.com/wp-content/uploads/2023/04/btb-chardonnay-2023-corey-creek-cellars-coquillage-chardonnay-internal.jpg", "full-bodied", "12.0", "high", "3.4", "Medium", "Kleine Zalze Wine Estate", "2018","750 ml","Cabernet Sauvignon","white","There is only one wine like this in the entire world… well… it’s this one. Coming from the North Fork of Long Island is this amazing Chardonnay that was AGED ON SEA SHELLS! It is so clean and mineral with nice mild fruit. The mouthfeel is soft and refreshing with a bit of depth and the slightest hint of briny sea shells on the finish. Run to a computer now and buy some.","462,34","52","Super Premium",2)
+,("Black Stallion Estate Winery Heritage Chardonnay","https://vinepair.com/wp-content/uploads/2023/04/btb-chardonnay-2023-black-stallion-winery-heritage-chardonnay-internal.jpg", "full-bodied", "12.5", "high", "3.4", "Medium", "Vilafonté Wines", "2016", "750 ml","Cabernet Sauvignon","white","For the price, this wine is punching above its weight. Soft and toasty with hints of vanilla and a creamy, coating mouthfeel, this wine drinks like a more expensive wine. And the balance on the palate with good natural acidity holds up the slight weight.","481,61","52","Super Premium",3)
+,("Domaine Skouras Dum Vinum Sperum Chardonnay","https://vinepair.com/wp-content/uploads/2023/04/btb-chardonnay-2023-skouras-dum-vinum-sperum-chardonnay-internal.jpg", "full-bodied", "12.8", "high", "3.4", "Medium", "Vilafonté Wines", "2017", "750 ml","Cabernet Sauvignon","white","This wine is as bright and refreshing as a Greek island breeze. The fruit is nice and ripe, balanced by soft tones of butter and vanilla. The acidity is so active that it bursts through the wine, keeping you aware of the next sip.","539,40","86,304","Super Premium",3)
+
+,("Dr. Konstantin Frank Old Vines Pinot Noir 2020","https://vinepair.com/wp-content/uploads/2023/03/good-wines-reds-finger-lakes-internal-dr-konstantin-frank-pinot-noir.jpg", "full-bodied", "12.5", "high", "3.6", "High", "Vilafonté Wines", "2020","750 ml","Pinot Noir","red","From a pioneering Finger Lakes winery, this is a Pinot Noir that can compete with many from California or Oregon. Perfectly balanced with refreshing acidity and light tannins, it offers tastes of cherry, strawberry, and blueberry with an overlay of vanilla and touches of earth and cookie dough. The website says the blend includes wine from the original Pinot Noir vines planted by its founder Dr. Konstantin Frank in 1958, representing the second-oldest Pinot Noir vines in the U.S.","519,94","52","Super Premium",3)
+,("Stony Lonesome Cabernet Sauvignon Sawmill Creek Vineyard 2020","https://vinepair.com/wp-content/uploads/2023/03/good-wines-reds-finger-lakes-internal-sawmill-creek-cabernet-sauvignon.jpg", "full-bodied", "12.3", "high", "3.2", "Medium", "Mullineux & Leeu Family Wines - Franschhoek", "2020", "750 ml","Pinot noir","red","This lovely Cabernet shows true varietal character in a fresh, approachable style. A beautiful combination of concentrated dark and red fruit tastes that include dried cherry, raspberry, and blackberry accented by a mocha note. Fine tannins add to the elegance of this classy wine with under-12 percent ABV. Stony Lonesome is a label of Three Brothers Wineries & Estates on Seneca Lake.","885,82","52","Ultra Premium",4)
+,("McGregor Vineyard Saperavi 2019","https://vinepair.com/wp-content/uploads/2023/03/good-wines-reds-finger-lakes-internal-mcgregor-saperavi.jpg", "full-bodied", "12.2", "high", "3.4", "Medium", "Mullineux & Leeu Family Wines - Franschhoek", "2019", "750 ml","Saperavi ","red","Saperavi, an ancient variety originally from the country of Georgia, soars in this phenomenal wine from McGregor, which overlooks Keuka Lake and was founded in 1971. Dark, dense, and full-bodied (but with alcohol at just 12.4 percent), aromas and tastes include blackberry and violets with hints of black licorice, green olive, and orange rind. Firm tannins and refreshing acidity complete the picture. McGregor also offers Reserve and Grand Reserve Saperavis with a year or two of additional age.","1155,42","52","Luxury",4)
+,("Wagner Vineyards Cabernet Franc 2020","https://vinepair.com/wp-content/uploads/2023/03/good-wines-reds-finger-lakes-internal-wagner-cabernet-franc.jpg", "full-bodied", "12.0", "high", "3.7", "Medium", "Mullineux & Leeu Family Wines - Franschhoek", "2020", "750 ml","Cabernet","red","This elegant wine, an under-$20 value, evokes some of the Cabernet Francs of France’s Loire Valley. Initial tastes of sour cherry and pomegranate give way to darker fruit notes as it opens up. There’s a touch of leafiness, which is typical of young Cab Franc. A refreshing wine of balance and complexity that will evolve for several years and is perfect for lighter foods, including white meats and fish.","365,88","52","Premium",4)
+,("Toast Winery Zweigelt 2021","https://vinepair.com/wp-content/uploads/2023/03/good-wines-reds-finger-lakes-internal-toast-zweigelt.jpg", "full-bodied", "12.1", "high", "3.3", "Medium", "Franschhoek Cellar", "2021", "750 ml","Pinot noir","red","Great acidity and freshness in this Austrian variety make it a superb food wine. It’s rather Beaujolais-like in taste and feel, with notes of sour cherry and blueberry and hints of vanilla and forest floor. It was perfect with a shrimp and vegetable risotto, neither overpowering, nor overpowered by, the food.","462,17","52","Super Premium",5)
+,("Weis Vineyards Blaufränkisch 2020","https://vinepair.com/wp-content/uploads/2023/03/good-wines-reds-finger-lakes-internal-weis-blaufrankisch.jpg", "full-bodied", "12.5", "high", "3.4", "Medium", "Franschhoek Cellar", "2020", "750 ml","Pinot noir","red","This stellar wine makes a convincing case for the importance of Blaufränkisch in the Finger Lakes. Savory, with notes of blackberry, plum, and overripe strawberry, the wine is lively and lean with an impressively long finish that beckons you for the next sip. A serious wine that should be compared with Blaufränkisches from Austria.","500,68","52","Super Premium",5)
+,("Fox Run Vineyards Unoaked Lemberger (Blaufränkisch) 2021","https://vinepair.com/wp-content/uploads/2023/03/good-wines-reds-finger-lakes-internal-fox-run-lemberger.jpg", "full-bodied", "12.9", "high", "3.1", "Medium", "Franschhoek Cellar", "2021", "750 ml","Pinot noir","red","Another wine that evokes young Beaujolais in its lightness and fruitiness with aromas and concentrated tastes of blackberry and blueberry compote and white pepper on the finish. With ample acidity, this will be a summer hit with a slight chill for all kinds of foods and for sipping on its own.","385,142","67,8112","Super Premium",5)
+,("Lakewood Vineyards Cabernet Franc 2020","https://vinepair.com/wp-content/uploads/2023/03/good-wines-reds-finger-lakes-internal-lakewood-cabernet-franc.jpg", "full-bodied", "12.0", "high", "3.2", "Medium", "La Bri Wine Estate", "2020", "750 ml","Pinot noirn","red","There’s lots of complexity in this Cab Franc, with blueberry and cranberry notes, touches of orange rind and spice, and subtle oak that provides hints of vanilla and smoke. Soft tannins round out the picture in an altogether lovely wine. Another excellent value.","385,14","52","Premium",6)
+,("Point of the Bluff Vineyards Reserve Pinot Noir","https://vinepair.com/wp-content/uploads/2023/03/good-wines-reds-finger-lakes-internal-point-of-the-bluff-pinot-noir.jpg", "full-bodied", "12.6", "high", "3.4", "Medium", "La Bri Wine Estate", "2020", "750 ml","Pinot noir","red","This delightful Pinot Noir, with ABV at just 12 percent, is complex and delicious, showing aromas and tastes of cherry, raspberry, and blueberry. The concentrated fruit is framed by lively acidity and accented by touches of earth, cinnamon, and vanilla. The winery on Keuka Lake claims on its website that its Pinot Noir “has the elegance and finesse of some of the best wine around the world.” I won’t disagree.","673,99","52","Ultra Premium",6)
+,("Heron Hill Winery Blaufränkisch Ingle Vineyard 2020","https://vinepair.com/wp-content/uploads/2023/03/good-wines-reds-finger-lakes-internal-heron-hill-blaufrankisch.jpg", "full-bodied", "12.1", "high", "3.4", "Medium", "La Bri Wine Estate", "2020", "750 ml","Pinot noir","red","This delicate and expressive Blaufränkisch shows dark fruit tastes, including cassis and black cherry, with secondary notes of white pepper, black licorice, and flowers. All of it is supported by a gentle tannic structure and balanced acidity. Serve it slightly chilled to give it an even more refreshing lift.","673,99","86,304","Ultra Premium",6);
+
+
+INSERT INTO bnumber (`BusinessID`,`BNumber`)
+VALUES (1,"021 883 2565")
+,(2,"021 880 0717")
+,(3,"021 886 4083")
+,(4,"021 492 2224")
+,(5,"021 876 2086")
+,(6,"021 876 2593");
+
+INSERT INTO bemail (`BusinessID`,`BEmail`)
+VALUES (1,"info@middelvleiwines.com")
+,(2,"info@kleinezalze.co.za")
+,(3,"info@vilafonte.com")
+,(4,"info@mullineuxandleeu.com")
+,(5,"info@franschhoekcellar.co.za")
+,(6,"info@labri.co.za");
+
+INSERT INTO event (`BusinessID`,`EventID`,`Description`,`Name`)
+VALUES (1,1,"Housed in an old horse stable, built in the late 1800’s and an extension completed in 2017, the restaurant has a verandah stepping out onto an open lawn overlooking the Middelvlei dam.","Middelvlei Celebrations at Boerebraai Restaurant")
+,(1,2,"The Wine Barn at Middelvlei is the ideal venue for a conference, conveniently located only 4 km from the Stellenbosch town centre.","Middelvlei Conferences")
+,(1,3,"Beautiful views, food and wine for your special day. Middelvlei has it all and best of all, we have a Wine Barn filled with charm.","Wine & Wedding")
+,(2,4,"The Kleine Zalze Wine Tasting center is situated between the winery on the one side and the restaurant on the other. You can pick from a wide selection of wine tasting options, depending on your preferences . Our knowledgeable wine advisors will be on hand to take you through your selection of our award winning wines in our tranquil setting under the vines or the oaks in summer or inside in winter.","Kleine Zalze Tasting Room")
+,(4,5,"The tasting room of Mullineux & Leeu Family Wines, called The Wine Studio, is on Leeu Estates in Franschhoek. It was designed by eminent Spanish Architect, Tomeu Esteva, who wanted to create the ultimate environment in which to taste fine wines.","Mullineux & Leeu Family Wines Tastings")
+,(5,6,"Franschhoek Cellar has an attentive and professional events team that will see to your every nuptial need, ensuring a stress-free wedding that is marked by warm hospitality, delicious food and wine, and vintage memories. This is where elegant, modern facilities meet the romance and charm of wine country life.","Franschhoek Weddings")
+,(6,7,"Experience the relaxed luxury of a conference in the Franschhoek Winelands. With our central location in the heart of the Cape Winelands, only a short, scenic drive from Cape Town, we are conveniently located to host your event in the tranquillity of the country while still close to urban amenities. We offer half and full day conference packages which include venue hire and set-up, standard conference equipment and exquisite catering.","Franschhoek Conferences")
+,(6,8,"A match made in our haven. Dark Belgian chocolate handcrafted by our local chocolatier and carefully selected by our winemaker to complement each of the decadent La Bri wines.","La Bri Wine Estate Wine Tasting");
+
+INSERT INTO favourite_business (`UserID`,`BusinessID`)
+VALUES (1,1)
+,(1,2)
+,(1,3)
+,(2,1)
+,(2,2)
+,(3,1)
+,(3,3)
+,(4,4)
+,(4,5)
+,(4,6)
+,(5,4)
+,(5,5)
+,(6,4)
+,(6,5)
+,(6,6)
+,(11,1)
+,(11,2)
+,(12,1)
+,(13,1)
+,(14,4)
+,(14,5)
+,(14,6)
+,(15,6)
+,(15,5)
+,(16,4);
+
+INSERT INTO favourite_wine (`WineID`,`UserID`)
+VALUES (1,1)
+,(1,2)
+,(1,3)
+,(2,1)
+,(2,2)
+,(3,1)
+,(3,3)
+,(4,4)
+,(4,5)
+,(4,6)
+,(5,4)
+,(5,5)
+,(6,4)
+,(6,5)
+,(6,6)
+,(7,1)
+,(7,2)
+,(8,12)
+,(9,1)
+,(10,12)
+,(10,2)
+,(11,1)
+,(11,2)
+,(12,1)
+,(13,1)
+,(14,4)
+,(14,5)
+,(14,6)
+,(15,6)
+,(15,5)
+,(16,4)
+,(17,1)
+,(17,2)
+,(18,1)
+,(19,4)
+,(19,2)
+,(20,1)
+,(20,19);
+
+INSERT INTO tourist (`UserID`)
+VALUES (2)
+,(7)
+,(8)
+,(9)
+,(10)
+,(11)
+,(12)
+,(13)
+,(14)
+,(15)
+,(16)
+,(17)
+,(18)
+,(19)
+,(20);
+
+INSERT INTO manager (`UserID`)
+VALUES (1)
+,(3)
+,(4)
+,(5)
+,(6);
