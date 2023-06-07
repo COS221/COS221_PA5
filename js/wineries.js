@@ -70,7 +70,7 @@ async function populateExploreWineries() {
   xhr.send(JSON.stringify(data));
 }
 
-function getRegionName(wineryname){
+function getRegionName(wineryname) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     const url = "PHP/Myapi.php";
@@ -86,7 +86,7 @@ function getRegionName(wineryname){
         let objectData = JSON.parse(this.responseText);
 
         //console.log("The returned BusinessINFO: " + this.responseText);
-        
+
         resolve(objectData.data.RegionName);
       } else if (xhr.readyState == 4 && xhr.status != 200) {
         reject("Api link not accessible.");
@@ -110,14 +110,32 @@ function populateSpecifications(wineryName) {
   var data = {
     type: "GetAllWineries",
     api_key: "123456",
-    //page: "index.php",
     search: { BName: WineryName },
     order: "desc",
-    //"limit":10,
     sort: "BName",
     fuzzy: false,
     return: "*",
   };
+  function getEvents(Bdata, callback) {
+    const Xhr = new XMLHttpRequest();
+    const Url = "PHP/Myapi.php";
+    var data = {
+      type: "getBusinessEvents",
+      api_key: "123456",
+      businessID: Bdata.data[0].Business_ID,
+    };
+
+    Xhr.onreadystatechange = function () {
+      if (Xhr.readyState == 4 && Xhr.status == 200) {
+        let ResponseObj = JSON.parse(this.responseText);
+        callback(ResponseObj);
+      }
+    };
+
+    Xhr.open("POST", Url, true);
+    Xhr.setRequestHeader("Content-type", "application/json");
+    Xhr.send(JSON.stringify(data));
+  }
 
   function initMap(latitude, longitude) {
     mapboxgl.accessToken =
@@ -129,77 +147,84 @@ function populateSpecifications(wineryName) {
       zoom: 15,
     });
   }
+
   let currName = "";
   var long;
   var lat;
+
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
       console.log(this.responseText);
-      let objectData = JSON.parse(this.responseText); //This will return one wine Item i.e the searched wine item.
+      let objectData = JSON.parse(this.responseText); // This will return one wine Item i.e the searched wine item.
       var rowDisplay = document.querySelector(".rowDisplay");
-      console.log(rowDisplay);
+      var resData;
 
-      data = ``;
-      for (i = 0; i < objectData.data.length; i++) {
-        //alert(objectData.data[i].Business_ID);
-        currName = objectData.data[i].BName;
-        data += `
-        
-        <div class="col-4">
-        <img src="${objectData.data[i].Business_URL}" alt="hrw-default" id= "wineryImage" style="margin: 15px; border-radius: 15px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); background-color: #00192b" />
-        
-        </div>
-        <div class="col-8">
-        <div id="map" style=" width: 100%; height: 100%; border-radius: 10px;"></div>
-        </div> 
-        <h4 id="WName" style="margin-top:20px">${objectData.data[i].BName}</h4>
-        <hr>
-        <div class="col-3">
-        <p>Weekday Opening Hours</p>
-        ${objectData.data[i].Weekday_open_time} - ${objectData.data[i].Weekday_close_time}
-        </div>
-        <div class="col-3">
-        <p>Weekend Opening Hours</p>
-        ${objectData.data[i].Weekend_open_time} - ${objectData.data[i].Weekend_close_time}
-        </div>
-        <hr style="margin-top: 20px"> 
-        <ul style="list-style: none;
-        display: flex;
-        flex-direction: row;">
-        
-        <a href=${objectData.data[i].Facebook}>
-        <img src="img/logo-facebook.svg" style="height:25px; width:25px;"/>
-        </a>
-        <a href=${objectData.data[i].Twitter} style="margin-left:20px;">
-        <img src="img/logo-twitter.svg" style="height:25px; width:25px;"/>
-        </a>
-        <a href=${objectData.data[i].Instagram} style="margin-left:20px;">
-        <img src="img/logo-instagram.svg" style="height:25px; width:25px;"/>
-        </a>
-        
-        <a href=${objectData.data[i].Website_URL} style="margin-left:20px;">
-        <p>${objectData.data[i].BName} Website</p>
-        </a>
-        </ul>
-        
-        
-        <hr> 
-        <div class="col-12" style="margin-bottom:20px">
-        ${objectData.data[i].Description}
-        </div>
-        
-        <div class="col-12">
-        
-        <button class="viewBusinessWines btn btn-md" id="${objectData.data[i].Business_ID}" style="background-color: #00192b; color:white; ">View Wines</button>
-        
-        </div>
-        `;
-      }
+      getEvents(objectData, function (result) {
+        resData = result.data;
 
-      rowDisplay.innerHTML = data;
-      getCoordinates(currName, function (coordinates) {
-        console.log(coordinates);
-        initMap(coordinates.lat, coordinates.long);
+        data = ``;
+        for (i = 0; i < objectData.data.length; i++) {
+          currName = objectData.data[i].BName;
+          data += `
+            <div class="col-4">
+              <img src="${objectData.data[i].Business_URL}" alt="hrw-default" id="wineryImage" style="margin: 15px; border-radius: 15px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); background-color: #00192b" />
+            </div>
+            <div class="col-8">
+              <div id="map" style=" width: 100%; height: 100%; border-radius: 10px;"></div>
+            </div> 
+            <h4 id="WName" style="margin-top:20px">${objectData.data[i].BName}</h4>
+            <hr>
+            <div class="col-3">
+              <p>Weekday Opening Hours</p>
+              ${objectData.data[i].Weekday_open_time} - ${objectData.data[i].Weekday_close_time}
+            </div>
+            <div class="col-3">
+              <p>Weekend Opening Hours</p>
+              ${objectData.data[i].Weekend_open_time} - ${objectData.data[i].Weekend_close_time}
+            </div>
+            <hr style="margin-top: 20px"> 
+            <ul style="list-style: none; display: flex; flex-direction: row;">
+              <a href=${objectData.data[i].Facebook}>
+                <img src="img/logo-facebook.svg" style="height:25px; width:25px;"/>
+              </a>
+              <a href=${objectData.data[i].Twitter} style="margin-left:20px;">
+                <img src="img/logo-twitter.svg" style="height:25px; width:25px;"/>
+              </a>
+              <a href=${objectData.data[i].Instagram} style="margin-left:20px;">
+                <img src="img/logo-instagram.svg" style="height:25px; width:25px;"/>
+              </a>
+              <a href=${objectData.data[i].Website_URL} style="margin-left:20px;">
+                <p>${objectData.data[i].BName} Website</p>
+              </a>
+            </ul>
+            <hr> 
+            <div class="col-12" style="margin-bottom:20px">
+              ${objectData.data[i].Description}
+            </div>
+            <div class="col-12">
+              <button class="viewBusinessWines btn btn-md" id="${objectData.data[i].Business_ID}" style="background-color: #00192b; color:white; ">View Wines</button>
+            </div>
+            <div>
+              <h4 style="margin-top:20px">Events</h4>
+              <ul style="list-style-type:none; padding:15px; background-color: #FAF9F6; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);">`;
+          if (resData.includes("No events")) {
+            data += `<h4>This winery has no events right now...</h4>`;
+          } else {
+            for (var j = 0; j < resData.length; j++) {
+              data += `<li><h5>${resData[j].Name}</h5></li>`;
+              data += `<li>${resData[j].Description}</li>`;
+            }
+          }
+
+          data += `</ul>
+            </div>`;
+        }
+
+        rowDisplay.innerHTML = data;
+        getCoordinates(currName, function (coordinates) {
+          console.log(coordinates);
+          initMap(coordinates.lat, coordinates.long);
+        });
       });
     } else {
       console.log("Api link not accessible.");
@@ -210,8 +235,6 @@ function populateSpecifications(wineryName) {
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.send(JSON.stringify(data));
 }
-
-
 
 document.addEventListener("click", function (event) {
   if (event.target.matches(".ourSpecButton")) {
@@ -225,7 +248,7 @@ document.addEventListener("click", function (event) {
   }
 });
 
-document.addEventListener("click", function (event){
+document.addEventListener("click", function (event) {
   if (event.target.matches(".viewBusinessWines")) {
     var btnElement = event.target;
     console.log(btnElement);
@@ -234,9 +257,9 @@ document.addEventListener("click", function (event){
     console.log(businessid);
 
     var businessName =
-    event.target.parentNode.parentNode.parentNode.querySelector(
-      "#WName"
-    ).innerHTML;
+      event.target.parentNode.parentNode.parentNode.querySelector(
+        "#WName"
+      ).innerHTML;
 
     populateBusinessWines(businessid, businessName);
   }
@@ -265,15 +288,14 @@ function getCoordinates(WineryName, callback) {
   xhr.send(JSON.stringify(data));
 }
 
-function search(event){
+function search(event) {
   const xhr = new XMLHttpRequest();
   const url = "PHP/Myapi.php";
 
   if (event.keyCode === 13) {
-
     event.preventDefault();
-    const userInput =(event.target.value).toLowerCase();
-      
+    const userInput = event.target.value.toLowerCase();
+
     var data = {
       type: "GetAllWineries",
       api_key: "123456",
@@ -286,24 +308,21 @@ function search(event){
       return: "*",
     };
 
-  xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        let objectData = JSON.parse(this.responseText);
 
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      let objectData = JSON.parse(this.responseText);
+        var row = document.querySelector(".row");
 
-      var row = document.querySelector(".row");
+        data = ``;
 
-      data = ``;
+        for (i = 0; i < objectData.data.length; i++) {
+          var wineryName = objectData.data[i].BName.toLowerCase();
 
-      for (i = 0; i < objectData.data.length; i++) {
-
-        var wineryName=(objectData.data[i].BName).toLowerCase();
-    
-        if(wineryName.indexOf(userInput)!==-1)
-        {
-          var WineryName = objectData.data[i].BName;
-          var underscoredWineryName = WineryName.replace(/\s/g, "_");
-          data += `<div class="col-md">
+          if (wineryName.indexOf(userInput) !== -1) {
+            var WineryName = objectData.data[i].BName;
+            var underscoredWineryName = WineryName.replace(/\s/g, "_");
+            data += `<div class="col-md">
                 <div class="card" style="color: black; width: 500px;">
                   <div class="card-body text-center">
                     <div class="h1 mb-3">
@@ -324,26 +343,26 @@ function search(event){
                   </div>
                 </div>
               </div>`;
+          }
         }
+
+        row.innerHTML = data;
+      } else {
+        console.log("Api link not accessible.");
       }
+    };
 
-      row.innerHTML = data;
-    } 
-    else {
-      console.log("Api link not accessible.");
-    }
-  };
-
-  xhr.open("POST", url, true);
-  xhr.setRequestHeader("Content-type", "application/json");
-  xhr.send(JSON.stringify(data));
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(JSON.stringify(data));
   }
 }
 
-function populateBusinessWines(business_id, business_name){
+function populateBusinessWines(business_id, business_name) {
   const xhr = new XMLHttpRequest();
   const url = "PHP/Myapi.php";
-  
+
+  var dataEvents = {};
   var data = {
     type: "getAllBusinessWines",
     api_key: "123456",
@@ -351,7 +370,7 @@ function populateBusinessWines(business_id, business_name){
   };
 
   //alert("The business ID is: " + business_id + " and the Business Name is: " + business_name);
-  
+
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
       var rowDisplay = document.querySelector(".rowDisplay");
@@ -443,11 +462,9 @@ function populateBusinessWines(business_id, business_name){
                 <h2>Cost per bottle: R${
                   responseObj.data[i].Cost_per_bottle
                 }</h2>
-                <h2>Cost per glass: R${
-                  responseObj.data[i].Cost_per_glass
-                }</h2>
+                <h2>Cost per glass: R${responseObj.data[i].Cost_per_glass}</h2>
               </table>
-                    
+              
                   </div>
                 </div>
               </div>
@@ -467,7 +484,7 @@ function populateBusinessWines(business_id, business_name){
   xhr.send(JSON.stringify(data));
 }
 
-async function sortRegion(setText){
+async function sortRegion(setText) {
   //alert(setText);
   const xhr = new XMLHttpRequest();
   const url = "PHP/Myapi.php";
@@ -481,7 +498,7 @@ async function sortRegion(setText){
     //"limit":10,
     sort: "BName",
     fuzzy: false,
-    return: "*"
+    return: "*",
   };
 
   //alert("The setText inside sortRegion is: " + setText);
@@ -496,13 +513,16 @@ async function sortRegion(setText){
       data = ``;
 
       for (i = 0; i < objectData.data.length; i++) {
-        var flag = await checkifCorrectRegion(objectData.data[i].BName, setText);
-        if (flag === true){
-        var region_name = await getRegionName(objectData.data[i].BName);
-        //alert("The Region Name is: " + region_name);
-        var WineryName = objectData.data[i].BName;
-        var underscoredWineryName = WineryName.replace(/\s/g, "_");
-        data += `<div class="col-md">
+        var flag = await checkifCorrectRegion(
+          objectData.data[i].BName,
+          setText
+        );
+        if (flag === true) {
+          var region_name = await getRegionName(objectData.data[i].BName);
+          //alert("The Region Name is: " + region_name);
+          var WineryName = objectData.data[i].BName;
+          var underscoredWineryName = WineryName.replace(/\s/g, "_");
+          data += `<div class="col-md">
         <div class="card" style="color: black; width: 500px;">
         <div class="card-body text-center">
         <div class="h1 mb-3">
@@ -530,14 +550,8 @@ async function sortRegion(setText){
         </div>
         </div>`;
         }
-        
-        
-        
-        
       }
       row.innerHTML = data;
-
-
     } else {
       console.log("Api link not accessible.");
     }
@@ -546,44 +560,39 @@ async function sortRegion(setText){
   xhr.open("POST", url, true);
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.send(JSON.stringify(data));
-
 }
 
-function checkifCorrectRegion(business_Name, region_Name){
+function checkifCorrectRegion(business_Name, region_Name) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     const url = "PHP/Myapi.php";
 
     //alert("This is the BUSINESS NAME: " + business_Name);
-  
+
     var data = {
       type: "getBusinessInfo",
       api_key: "123456",
-      businessName:business_Name
+      businessName: business_Name,
     };
-  
+
     xhr.onreadystatechange = function () {
       if (xhr.readyState == 4 && xhr.status == 200) {
         flag = false;
         let objectData = JSON.parse(this.responseText);
         //alert("This is the region name in onreadyStateChange: " + objectData.data.RegionName);
-        if (objectData.data.RegionName === region_Name)
-        {
+        if (objectData.data.RegionName === region_Name) {
           //alert("This is the business REGION name: " + objectData.data.RegionName + " and this is the business_Name: " + business_Name);
           flag = true;
         }
-        
+
         resolve(flag);
       } else if (xhr.readyState == 4 && xhr.status != 200) {
         reject("Api link not accessible.");
       }
     };
-  
+
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(JSON.stringify(data));
   });
 }
-
-
-

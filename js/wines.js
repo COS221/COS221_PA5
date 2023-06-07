@@ -445,29 +445,33 @@ async function sortData(text) {
         console.log(WineName);
         var underscoredName = WineName.replace(/\s/g, "_"); //Wine Name spaces replaced with underscore.
         console.log(underscoredName);
-        data += `<div class="col-md" >
-                <div class="card" style="color: black">
-                  <div class="card-body text-center">
-                    <h5 class="card-title" style="margin-top: 10px; margin-bottom: 0px">
-                      ${objectData.data[i].Name}
-                    </h5>
-                    <h8 class="card-cultivar">category | ${objectData.data[i].Category}</h8>
-                    <h4 class="card-rating mb-3" style="margin-top: 0; padding-top: 0px">
-                      Rating: ${average}/5
-                    </h4>
-                    <div class="card-img-container" style="border-radius: 5px;">
-                      <img src="${objectData.data[i].Wine_URL}" style="width: 230px; height: 210px;"/>
-                    </div>
-                    <h3 class="card-price" style="margin: 0px; margin-bottom: 15px"> R
-                    ${objectData.data[i].Cost_per_bottle}
-                    </h3>
-                    <button class="ourSpecButton btn btn-primary " id="${underscoredName}" data-bs-toggle="modal" data-bs-target="#myModal" style="background-color: #00192b;">Learn More</button>
-                    <button class="favouriteWine btn btn-primary" id="${objectData.data[i].WineID}" style="color: white; background-color:#00192b"
-                    onclick="this.style.backgroundColor = this.style.backgroundColor === 'red' ? '#00192b' : 'red'">Favourite
-                    </button>
-                  </div>
-                </div>
-              </div>`;
+        data += `<div class="col-md"  >
+        <div class="card" style="color: black; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <div class="card-body text-center">
+            <h5 class="card-title" style="margin-top: 10px; margin-bottom: 0px; width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;">
+              ${objectData.data[i].Name}
+            </h5>
+            <h8 class="card-cultivar">category | ${objectData.data[i].Category}</h8>
+            <h4 class="card-rating mb-3" style="margin-top: 0; padding-top: 0px">
+              Rating: ${average}/5
+            </h4>
+            <div class="card-img-container" style="border-radius: 5px;">
+              <img src="${objectData.data[i].Wine_URL}" style="    width:80px;
+              height:180px;"/>
+            </div>
+            <h3 class="card-price" style="margin: 0px; margin-bottom: 15px"> R
+            ${objectData.data[i].Cost_per_bottle}
+            </h3>
+            <button class="ourSpecButton btn btn-primary " id="${underscoredName}" data-bs-toggle="modal" data-bs-target="#myModal" style="background-color: #00192b;">Learn More</button>
+            <button class="favouriteWine btn btn-primary" id="${objectData.data[i].WineID}" style="color: white; background-color:#00192b"
+            onclick="this.style.backgroundColor = this.style.backgroundColor === 'red' ? '#00192b' : 'red'">Favourite
+            </button>
+          </div>
+        </div>
+      </div>`;
       }
 
       row.innerHTML = data;
@@ -626,29 +630,33 @@ async function filterData(newText) {
         average = rating;
         var WineName = objectData.data[i].Name;
         var underscoredName = WineName.replace(/\s/g, "_"); //Wine Name spaces replaced with underscore.
-        data += `<div class="col-md" >
-                  <div class="card" style="color: black">
-                    <div class="card-body text-center">
-                      <h5 class="card-title" style="margin-top: 10px; margin-bottom: 0px">
-                        ${objectData.data[i].Name}
-                      </h5>
-                      <h8 class="card-cultivar">category | ${objectData.data[i].Category}</h8>
-                      <h4 class="card-rating mb-3" style="margin-top: 0; padding-top: 0px">
-                        Rating: ${average}/5
-                      </h4>
-                      <div class="card-img-container" style="border-radius: 5px;">
-                        <img src="${objectData.data[i].Wine_URL}" style="width: 230px; height: 210px;"/>
-                      </div>
-                      <h3 class="card-price" style="margin: 0px; margin-bottom: 15px"> R
-                      ${objectData.data[i].Cost_per_bottle}
-                      </h3>
-                      <button class="ourSpecButton btn btn-primary " id="${underscoredName}" data-bs-toggle="modal" data-bs-target="#myModal" style="background-color: #00192b;">Learn More</button>
-                      <button class="favouriteWine btn btn-primary" id="${objectData.data[i].WineID}" style="color: white; background-color:#00192b"
-                      onclick="this.style.backgroundColor = this.style.backgroundColor === 'red' ? '#00192b' : 'red'">Favourite
-                      </button>
-                    </div>
-                  </div>
-                </div>`;
+        data += `<div class="col-md"  >
+        <div class="card" style="color: black; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <div class="card-body text-center">
+            <h5 class="card-title" style="margin-top: 10px; margin-bottom: 0px; width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;">
+              ${objectData.data[i].Name}
+            </h5>
+            <h8 class="card-cultivar">category | ${objectData.data[i].Category}</h8>
+            <h4 class="card-rating mb-3" style="margin-top: 0; padding-top: 0px">
+              Rating: ${average}/5
+            </h4>
+            <div class="card-img-container" style="border-radius: 5px;">
+              <img src="${objectData.data[i].Wine_URL}" style="    width:80px;
+              height:180px;"/>
+            </div>
+            <h3 class="card-price" style="margin: 0px; margin-bottom: 15px"> R
+            ${objectData.data[i].Cost_per_bottle}
+            </h3>
+            <button class="ourSpecButton btn btn-primary " id="${underscoredName}" data-bs-toggle="modal" data-bs-target="#myModal" style="background-color: #00192b;">Learn More</button>
+            <button class="favouriteWine btn btn-primary" id="${objectData.data[i].WineID}" style="color: white; background-color:#00192b"
+            onclick="this.style.backgroundColor = this.style.backgroundColor === 'red' ? '#00192b' : 'red'">Favourite
+            </button>
+          </div>
+        </div>
+      </div>`;
       }
 
       row.innerHTML = data;
